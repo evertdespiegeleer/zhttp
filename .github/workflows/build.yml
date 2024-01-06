@@ -1,0 +1,33 @@
+name: Commit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: node:20
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Build
+      run: yarn build
+  test:
+    runs-on: node:20
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Test
+      run: yarn test

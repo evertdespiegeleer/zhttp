@@ -1,0 +1,52 @@
+{
+  "name": "httpz",
+  "version": "0.0.0",
+  "description": "An opinionated, type-safe http library build around Express and Zod",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "type": "module",
+  "author": "Evert De Spiegeleer",
+  "license": "MIT",
+  "engines": {
+    "node": "20.x.x",
+    "yarn": "^1.22.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --test --loader ts-node/esm ./src/**/*.test.ts",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^6.3.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "middleware-async": "^1.4.0",
+    "prom-client": "^15.1.0",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "@types/sinon": "^17.0.2",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^9.0.7",
+    "c8": "^9.0.0",
+    "chai": "^5.0.0",
+    "devmoji": "^2.3.0",
+    "glob": "^10.3.10",
+    "husky": "^8.0.0",
+    "macha": "^0.0.0",
+    "sinon": "^17.0.1",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "zod": "^3.22.4"
+  }
+}
