@@ -1,0 +1,57 @@
+name: release-patch
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        type: choice
+        description: Semver release type
+        required: true
+        options: 
+        - patch
+        - minor
+        - major
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Configure Git
+        uses: fregante/setup-git-user@v1
+          
+      - name: Version the package (Major)
+        run: npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }}
+
+      - name: Publish to GitHub Package Registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          npm publish --registry https://npm.pkg.github.com/
+      
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "chore(version): 📦 bump version for ${{ github.event.inputs.release-type }} release"
+          git push
