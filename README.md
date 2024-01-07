@@ -1,10 +1,4 @@
-<center>
-<h1>
-zhttp
-</h1>
-
-A minimal, strongly typed HTTP library with Zod validation 🧑‍💻
-</center>
+![zhttp, a minimal, strongly typed HTTP library with Zod validation](./.readme-files/header.png)
 
 ## Usage example
 
