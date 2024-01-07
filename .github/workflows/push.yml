@@ -85,13 +85,10 @@ jobs:
         id: extract_branch
       
       - name: Configure Git
-        run: |
-          git config --global user.email "evert.de.spiegeleer@gmail.com"
-          git config --global user.name "Evert De Spiegeleer"
-          git config --global push.default simple
+        uses: fregante/setup-git-user@v1
 
       - name: Version the package
-        run: npm version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
+        run: npm version --no-commit-hooks --no-git-tag-version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
   
       - name: Commit and push changes
         run: |
@@ -130,13 +127,10 @@ jobs:
 
 
       - name: Version the package (Patch)
-        run: npm version patch
+        run: npm version --no-commit-hooks --no-git-tag-version patch
 
       - name: Configure Git
-        run: |
-          git config --global user.email "evert.de.spiegeleer@gmail.com"
-          git config --global user.name "Evert De Spiegeleer"
-          git config --global push.default simple
+        uses: fregante/setup-git-user@v1
 
       - name: Commit and push changes
         run: |
@@ -174,13 +168,10 @@ jobs:
           path: ./dist
 
       - name: Configure Git
-        run: |
-          git config --global user.email "evert.de.spiegeleer@gmail.com"
-          git config --global user.name "Evert De Spiegeleer"
-          git config --global push.default simple
+        uses: fregante/setup-git-user@v1
 
       - name: Version the package (Minor)
-        run: npm version minor
+        run: npm version --no-commit-hooks --no-git-tag-version minor
 
       - name: Commit and push changes
         run: |
@@ -218,13 +209,10 @@ jobs:
           path: ./dist
 
       - name: Configure Git
-        run: |
-          git config --global user.email "evert.de.spiegeleer@gmail.com"
-          git config --global user.name "Evert De Spiegeleer"
-          git config --global push.default simple
+        uses: fregante/setup-git-user@v1
           
       - name: Version the package (Major)
-        run: npm version major
+        run: npm version --no-commit-hooks --no-git-tag-version major
 
       - name: Commit and push changes
         run: |
