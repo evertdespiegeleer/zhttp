@@ -108,7 +108,7 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
           echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --access=public --tag pre-${{ steps.version.outputs.version }}
+          npm publish --access=public --tag prerelease
           rm -f ~/.npmrc
 
       - name: Commit and push changes
