@@ -1,6 +1,6 @@
-import { controller } from '../util/controller.js';
-import { get } from '../util/endpoint.js';
-import { oasInstance } from '../app.js';
+import { controller } from '../util/controller.js'
+import { get } from '../util/endpoint.js'
+import { oasInstance } from '../app.js'
 
 export const openapiController = controller('OpenAPI')
   .description('Meta information about the application')
@@ -8,7 +8,7 @@ export const openapiController = controller('OpenAPI')
     get('/openapi.json', 'getOpenAPISpec')
       .responseContentType('application/json')
       .handler(async () => {
-        return oasInstance.getJsonSpec();
+        return oasInstance.getJsonSpec()
       }),
 
     get('/api.html', 'API usage')
@@ -34,6 +34,6 @@ export const openapiController = controller('OpenAPI')
           />
         </body>
       </html>
-    `,
+    `
       )
-  ]);
+  ])

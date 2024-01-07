@@ -1,65 +1,66 @@
 import {
   endpointToExpressHandler,
   type AnyEndpoint,
-  type Endpoint,
-} from './endpoint.js';
-import { type Application } from 'express';
-import { Middleware, MiddlewareTypes } from './middleware.js';
+  type Endpoint
+} from './endpoint.js'
+import { type Application } from 'express'
+import { type Middleware, MiddlewareTypes } from './middleware.js'
 
 interface ControllerOptions {
-  name?: string;
-  description?: string;
-  middlewares: Middleware[];
-  endpoints: Endpoint[];
+  name?: string
+  description?: string
+  middlewares: Middleware[]
+  endpoints: Endpoint[]
 }
 
 export class Controller {
-  constructor(private options: ControllerOptions) {}
+  constructor (private readonly options: ControllerOptions) {}
 
   /** Add a description to the controller */
-  description(description: typeof this.options.description) {
-    this.options.description = description;
-    return this;
+  description (description: typeof this.options.description) {
+    this.options.description = description
+    return this
   }
 
   /** Add an endpoint to the controller */
-  endpoint(endpoint: AnyEndpoint) {
-    this.options.endpoints.push(endpoint);
-    return this;
+  endpoint (endpoint: AnyEndpoint) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    this.options.endpoints.push(endpoint)
+    return this
   }
 
   /** Add an array of endpoints to the controller */
-  endpoints(endpoints: AnyEndpoint[]) {
-    this.options.endpoints.push(...endpoints);
-    return this;
+  endpoints (endpoints: AnyEndpoint[]) {
+    this.options.endpoints.push(...endpoints)
+    return this
   }
 
   /** Add a middleware to the controller */
-  middleware(middleware: Middleware) {
-    this.options.middlewares.push(middleware);
-    return this;
+  middleware (middleware: Middleware) {
+    this.options.middlewares.push(middleware)
+    return this
   }
 
   /** Add an array of middlewares to the controller */
-  middlewares(middlewares: Middleware[]) {
-    this.options.middlewares.push(...middlewares);
-    return this;
+  middlewares (middlewares: Middleware[]) {
+    this.options.middlewares.push(...middlewares)
+    return this
   }
 
-  getEndpoints() {
-    return this.options.endpoints;
+  getEndpoints () {
+    return this.options.endpoints
   }
 
-  getMiddlewares() {
-    return this.options.middlewares;
+  getMiddlewares () {
+    return this.options.middlewares
   }
 
-  getName() {
-    return this.options.name;
+  getName () {
+    return this.options.name
   }
 
-  getDescription() {
-    return this.options.description;
+  getDescription () {
+    return this.options.description
   }
 }
 
@@ -67,19 +68,19 @@ export const controller = (name: string) =>
   new Controller({
     name,
     endpoints: [],
-    middlewares: [],
-  });
+    middlewares: []
+  })
 
 export const bindControllerToApp = (
   controller: Controller,
-  app: Application,
+  app: Application
 ) => {
   const controllerBeforeMiddlewares = controller
     .getMiddlewares()
-    .filter((m) => m.type === MiddlewareTypes.BEFORE);
+    .filter((m) => m.type === MiddlewareTypes.BEFORE)
   const controllerAfterMiddlewares = controller
     .getMiddlewares()
-    .filter((m) => m.type === MiddlewareTypes.AFTER);
+    .filter((m) => m.type === MiddlewareTypes.AFTER)
 
   controller.getEndpoints().forEach((endpoint) => {
     app[endpoint.getMethod()](
@@ -101,7 +102,7 @@ export const bindControllerToApp = (
         .map((m) => m.handler),
 
       // Controller after middleware
-      ...controllerAfterMiddlewares.map((m) => m.handler),
-    );
-  });
-};
+      ...controllerAfterMiddlewares.map((m) => m.handler)
+    )
+  })
+}

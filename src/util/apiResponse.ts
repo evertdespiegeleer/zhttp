@@ -1,52 +1,52 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 interface IApiResponseOptions {
-  error?: Error;
-  meta?: Record<string, string | number>;
+  error?: Error
+  meta?: Record<string, string | number>
 }
 
-export function apiResponse<DataType = unknown>(
+export function apiResponse<DataType = unknown> (
   data: DataType,
-  opts?: IApiResponseOptions,
+  opts?: IApiResponseOptions
 ) {
-  if (opts?.error) {
+  if (opts?.error != null) {
     const errorDetails = {
       code: opts.error?.name ?? 'InternalServerError',
 
-      details: opts.error?.hasOwnProperty('details')
-        ? // @ts-expect-error Error typing is weird in ts... but we validate during runtime so should be OK
-          opts.error?.details
-        : {},
-    };
+      // eslint-disable-next-line no-prototype-builtins
+      details: (opts.error as any)?.details != null // @ts-expect-error Error typing is weird in ts... but we validate during runtime so should be OK
+        ? opts.error?.details
+        : {}
+    }
 
     return {
       meta: {
         serverTime: new Date().toISOString(),
         error: errorDetails,
-        ...opts?.meta,
+        ...opts?.meta
       },
-      data,
-    } satisfies z.infer<typeof zGenericApiOutput>;
+      data
+    } satisfies z.infer<typeof zGenericApiOutput>
   }
 
   return {
     meta: {
       serverTime: new Date().toISOString(),
-      ...opts?.meta,
+      ...opts?.meta
     },
-    data,
-  } satisfies z.infer<typeof zGenericApiOutput>;
+    data
+  } satisfies z.infer<typeof zGenericApiOutput>
 }
 
 const zErrorOutput = z.object({
   code: z.string(),
-  details: z.any(),
-});
+  details: z.any()
+})
 
 const zMetaDataOutput = z.object({
   serverTime: z.string().datetime(),
-  error: zErrorOutput.optional(),
-});
+  error: zErrorOutput.optional()
+})
 
 /**
  * Schema wrapper for a default api output schema
@@ -73,11 +73,11 @@ const zMetaDataOutput = z.object({
  * ```
  */
 export const zApiOutput = <OutputSchema extends z.ZodSchema>(
-  dataSchema: OutputSchema,
+  dataSchema: OutputSchema
 ) =>
-  z.object({
-    meta: zMetaDataOutput,
-    data: dataSchema,
-  });
+    z.object({
+      meta: zMetaDataOutput,
+      data: dataSchema
+    })
 
-const zGenericApiOutput = zApiOutput(z.any());
+const zGenericApiOutput = zApiOutput(z.any())
