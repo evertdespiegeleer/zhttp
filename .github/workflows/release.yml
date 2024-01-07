@@ -7,14 +7,10 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: ["audit"]
-    types: 
-      - completed
 
 jobs:
   pr-prerelease:
-    if: github.event.workflow_run.conclusion == 'success' && github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
