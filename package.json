@@ -1,6 +1,6 @@
 {
   "name": "httpz",
-  "version": "0.0.1-ci-release.2",
+  "version": "0.0.1",
   "description": "An opinionated, type-safe http library build around Express and Zod",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
