@@ -1,12 +1,12 @@
-import { HTTPZServer } from '../app.js';
+import { Server } from '../app.js';
 import supertest from 'supertest';
 import { describe, it, before, after } from 'node:test';
 import { openapiController } from './openapi.js';
 
 describe('app', () => {
-  let http: HTTPZServer;
+  let http: Server;
   before(async () => {
-    http = new HTTPZServer({
+    http = new Server({
       controllers: [openapiController]
     }, { port: undefined });
     await http.start();

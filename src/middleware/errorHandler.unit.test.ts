@@ -1,4 +1,4 @@
-import { HTTPZServer } from '../app.js';
+import { Server } from '../app.js';
 import supertest, { type Response } from 'supertest';
 import { expect } from 'chai';
 import { describe, it, before, after } from 'node:test';
@@ -6,7 +6,7 @@ import { controller, get } from '../main.js';
 import { BadRequestError, ConflictError } from '../util/errors.js';
 
 describe('app', () => {
-  let http: HTTPZServer;
+  let http: Server;
   before(async () => {
     const testController = controller('test-controller').endpoints([
       get('/unhandled-error').handler(() => {
@@ -22,7 +22,7 @@ describe('app', () => {
       }),
     ]);
 
-    http = new HTTPZServer(
+    http = new Server(
       {
         controllers: [testController],
       },

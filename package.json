@@ -1,7 +1,7 @@
 {
-  "name": "httpz",
+  "name": "@zhttp/core",
   "version": "0.0.1",
-  "description": "An opinionated, type-safe http library build around Express and Zod",
+  "description": "A minimal, strongly typed HTTP library with Zod validation",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "files": [

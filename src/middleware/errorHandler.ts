@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { MiddlewareTypes, middleware } from '../util/middleware.js';
 import { apiResponse } from '../util/apiResponse.js';
-import { ConflictError, HttpzError, InternalServerError } from '../util/errors.js';
+import { ConflictError, ZHTTPError, InternalServerError } from '../util/errors.js';
 import { ILogger } from '../util/logger.js';
 
 export const makeErrorHandlerMiddleware = (logger: ILogger) => middleware({
@@ -25,7 +25,7 @@ export const makeErrorHandlerMiddleware = (logger: ILogger) => middleware({
       parsedError = new ConflictError(parsedError.message);
     }
 
-    if (originalError instanceof HttpzError) {
+    if (originalError instanceof ZHTTPError) {
       status = originalError.http;
       parsedError = originalError;
     }
