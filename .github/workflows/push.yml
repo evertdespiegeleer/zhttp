@@ -1,0 +1,263 @@
+name: push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: 
+    branches: 
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Set Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Build
+      run: yarn build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: ./dist
+  
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Set Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Test
+      run: yarn test
+    
+    - name: Test Report
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: test-report.xml
+      if: always()
+  
+  pr-prerelease:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: ./dist
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      
+      - name: Configure Git
+        uses: fregante/setup-git-user@v1
+
+      - name: Version the package
+        run: npm version --no-commit-hooks --no-git-tag-version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
+
+  
+      - name: Publish to GitHub Package Registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          npm publish --registry https://npm.pkg.github.com/
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "chore(version): 📦 bump version for prerelease"
+          git push
+      
+      # - name: Publish to npm
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+  patch-release:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: ./dist
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Version the package (Patch)
+        run: npm version --no-commit-hooks --no-git-tag-version patch
+
+      - name: Configure Git
+        uses: fregante/setup-git-user@v1
+
+      - name: Publish to GitHub Package Registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          npm publish --registry https://npm.pkg.github.com/
+      
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "chore(version): 📦 bump version for patch release"
+          git push
+
+  minor-release:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: ./dist
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Configure Git
+        uses: fregante/setup-git-user@v1
+
+      - name: Version the package (Minor)
+        run: npm version --no-commit-hooks --no-git-tag-version minor
+  
+      - name: Publish to GitHub Package Registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          npm publish --registry https://npm.pkg.github.com/
+      
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "chore(version): 📦 bump version for minor release"
+          git push
+
+  major-release:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: ./dist
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Configure Git
+        uses: fregante/setup-git-user@v1
+          
+      - name: Version the package (Major)
+        run: npm version --no-commit-hooks --no-git-tag-version major
+
+      - name: Publish to GitHub Package Registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          npm publish --registry https://npm.pkg.github.com/
+      
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "chore(version): 📦 bump version for major release"
+          git push
