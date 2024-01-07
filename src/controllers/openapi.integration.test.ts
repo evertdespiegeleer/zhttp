@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import { describe, it, before, after } from 'node:test';
 import { openapiController } from './openapi.js';
 
-describe('app', () => {
+describe('openapiController', () => {
   let http: Server;
   before(async () => {
     http = new Server({

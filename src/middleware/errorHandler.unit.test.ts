@@ -5,7 +5,7 @@ import { describe, it, before, after } from 'node:test';
 import { controller, get } from '../main.js';
 import { BadRequestError, ConflictError } from '../util/errors.js';
 
-describe('app', () => {
+describe('errorHandler', () => {
   let http: Server;
   before(async () => {
     const testController = controller('test-controller').endpoints([
