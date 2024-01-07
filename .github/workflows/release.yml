@@ -37,7 +37,8 @@ jobs:
       - name: Configure Git
         uses: fregante/setup-git-user@v1
           
-      - name: Version the package (Major)
+      - name: Version the package
+        id: version
         run: npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }}
       
       - name: Publish to npm
@@ -49,5 +50,5 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to $(node -e \"console.log(require('./package.json').version)\")"
+          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.stdout }}"
           git push

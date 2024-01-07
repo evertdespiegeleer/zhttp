@@ -99,6 +99,7 @@ jobs:
         uses: fregante/setup-git-user@v1
 
       - name: Version the package
+        id: version
         run: npm version --no-commit-hooks --no-git-tag-version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
       
       - name: Publish to npm
@@ -110,5 +111,5 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git commit -am "chore(version): 📦 prerelease version bump to $(node -e \"console.log(require('./package.json').version)\")"
+          git commit -am "chore(version): 📦 prerelease version bump to ${{ steps.version.outputs.stdout }}"
           git push
