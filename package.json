@@ -1,16 +1,20 @@
 {
   "name": "@zhttp/core",
-  "version": "0.0.2",
   "description": "A minimal, strongly typed HTTP library with Zod validation",
+  "author": "Evert De Spiegeleer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evertdespiegeleer/zhttp.git"
+  },
+  "version": "0.0.2",
+  "type": "module",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "files": [
     "./dist",
     "./readme.md"
   ],
-  "type": "module",
-  "author": "Evert De Spiegeleer",
-  "license": "MIT",
   "engines": {
     "node": "20.x.x",
     "yarn": "^1.22.0"
