@@ -89,6 +89,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
+      - test
+      - lint
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -126,7 +128,7 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
           echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --access=public
+          npm publish --access=public --tag pr-prerelease-${{ steps.version.outputs.stdout }}
           rm -f ~/.npmrc
 
       - name: Commit and push changes
