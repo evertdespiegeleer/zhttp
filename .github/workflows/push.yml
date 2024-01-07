@@ -67,6 +67,9 @@ jobs:
   pr-prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     needs:
       - build
     steps:
@@ -80,6 +83,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -107,9 +111,9 @@ jobs:
           git push
   
       - name: Publish to GitHub Package Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
-          npm publish --registry https://npm.pkg.github.com/
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       # - name: Publish to npm
       #   run: npm publish
@@ -119,6 +123,9 @@ jobs:
   patch-release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     needs:
       - build
     steps:
@@ -132,6 +139,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+          registry-url: 'https://npm.pkg.github.com'
       
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -154,9 +162,9 @@ jobs:
           git push
 
       - name: Publish to GitHub Package Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
-          npm publish --registry https://npm.pkg.github.com/
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Publish to npm
         run: npm publish
@@ -166,6 +174,9 @@ jobs:
   minor-release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     needs:
       - build
     steps:
@@ -179,6 +190,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -201,9 +213,9 @@ jobs:
           git push
   
       - name: Publish to GitHub Package Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
-          npm publish --registry https://npm.pkg.github.com/
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Publish to npm
         run: npm publish
@@ -213,6 +225,9 @@ jobs:
   major-release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     needs:
       - build
     steps:
@@ -226,6 +241,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -248,9 +264,9 @@ jobs:
           git push
 
       - name: Publish to GitHub Package Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
-          npm publish --registry https://npm.pkg.github.com/
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Publish to npm
         run: npm publish
