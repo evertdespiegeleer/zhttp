@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import express, { Application } from 'express';
-import { Server, createServer } from 'node:http';
+import { Server as NodeHttpServer, createServer } from 'node:http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -28,9 +28,9 @@ interface IHTTPOptions {
 
 export let oasInstance: Oas;
 
-export class HTTPZServer {
+export class Server {
   private app: Application;
-  private httpServer: Server;
+  private httpServer: NodeHttpServer;
   private logger: ILogger;
   private loggerInstance;
 
@@ -39,7 +39,7 @@ export class HTTPZServer {
     private httpOptions: IHTTPOptions = {},
   ) {
     this.logger = httpOptions.logger ?? defaultLogger;
-    this.loggerInstance = this.logger('httpz');
+    this.loggerInstance = this.logger('zhttp');
 
     oasInstance = new Oas(httpOptions.oasInfo);
 

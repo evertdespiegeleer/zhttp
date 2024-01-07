@@ -1,4 +1,4 @@
-export { HTTPZServer } from './app.js';
+export { Server } from './app.js';
 export {
   endpoint,
   type Method,

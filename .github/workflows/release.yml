@@ -37,24 +37,18 @@ jobs:
       - name: Configure Git
         uses: fregante/setup-git-user@v1
           
-      - name: Version the package (Major)
+      - name: Version the package
+        id: version
         run: npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }}
-
-      - name: Publish to GitHub Package Registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
-          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
-          npm publish --registry https://npm.pkg.github.com/
-          rm -f ~/.npmrc
       
       - name: Publish to npm
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
-          echo "@evertdespiegeleer:registry=https://registry.npmjs.org" >> ~/.npmrc
+          echo "registry=https://registry.npmjs.org" >> ~/.npmrc
           npm publish --access=public
           rm -f ~/.npmrc
 
       - name: Commit and push changes
         run: |
-          git commit -am "chore(version): 📦 bump version for ${{ github.event.inputs.release-type }} release"
+          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.stdout }}"
           git push

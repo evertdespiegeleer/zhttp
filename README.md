@@ -1,10 +1,16 @@
-# httpz
+<center>
+<h1>
+zhttp
+</h1>
 
-## Usage
+A minimal, strongly typed HTTP library with Zod validation 🧑‍💻
+</center>
+
+## Usage example
 
 ```typescript
 import { z } from "zod";
-import { HTTPZServer, controller, get, extendZodWithOpenApi, zApiOutput, apiResponse } from "httpz";
+import { Server, controller, get, extendZodWithOpenApi, zApiOutput, apiResponse } from "@httpz/core";
 
 extendZodWithOpenApi(z);
 // ⬆ What this allows you to do is to optionally add OAS info
@@ -37,7 +43,7 @@ helloController.endpoint(
     })
 )
 
-const server = new HTTPZServer({
+const server = new Server({
     controllers: [
         helloController
     ]
