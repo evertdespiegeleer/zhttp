@@ -57,7 +57,7 @@ describe('endpoint', () => {
         })
       )
       .response(zApiOutput(z.string()))
-      .handler(async ({ query }) => {
+      .handler(({ query }) => {
         return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
       })
   })
