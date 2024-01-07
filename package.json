@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.3-fix-prerelease-versions-marked-as-latest.2",
+  "version": "0.0.3-fix-prerelease-versions-marked-as-latest.3",
   "type": "module",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
