@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.3",
+  "version": "0.0.4-linting.0",
   "type": "module",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
@@ -22,7 +22,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint ./src/**/*.ts",
+    "lint:fix": "yarn run lint --fix"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
@@ -43,14 +45,20 @@
     "@types/sinon": "^17.0.2",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
     "chai": "^5.0.0",
     "devmoji": "^2.3.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^43.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
     "husky": "^8.0.0",
     "macha": "^0.0.0",
     "sinon": "^17.0.1",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "*"
   },
   "peerDependencies": {
     "zod": "^3.22.4"
