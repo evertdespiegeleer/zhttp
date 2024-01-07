@@ -87,6 +87,8 @@ jobs:
           name: build
           path: ./dist
 
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
       
       - name: Extract branch name
         shell: bash
@@ -137,6 +139,8 @@ jobs:
           name: build
           path: ./dist
 
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Version the package (Patch)
         run: npm version --no-commit-hooks --no-git-tag-version patch
@@ -182,6 +186,9 @@ jobs:
           name: build
           path: ./dist
 
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Configure Git
         uses: fregante/setup-git-user@v1
 
@@ -225,6 +232,9 @@ jobs:
         with:
           name: build
           path: ./dist
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Configure Git
         uses: fregante/setup-git-user@v1
