@@ -1,4 +1,4 @@
-name: release-patch
+name: release
 
 on:
   workflow_dispatch:
