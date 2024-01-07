@@ -1,7 +1,6 @@
 import {
   endpointToExpressHandler,
-  type AnyEndpoint,
-  type Endpoint
+  type AnyEndpoint
 } from './endpoint.js'
 import { type Application } from 'express'
 import { type Middleware, MiddlewareTypes } from './middleware.js'
@@ -10,7 +9,7 @@ interface ControllerOptions {
   name?: string
   description?: string
   middlewares: Middleware[]
-  endpoints: Endpoint[]
+  endpoints: AnyEndpoint[]
 }
 
 export class Controller {

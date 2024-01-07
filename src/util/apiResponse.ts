@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 interface IApiResponseOptions {
-  error?: Error
+  error?: any
   meta?: Record<string, string | number>
 }
 
@@ -9,13 +9,12 @@ export function apiResponse<DataType = unknown> (
   data: DataType,
   opts?: IApiResponseOptions
 ) {
-  if (opts?.error) {
+  if (opts?.error != null) {
     const errorDetails = {
       code: opts.error?.name ?? 'InternalServerError',
 
-      details: opts.error?.hasOwnProperty('details')
-        ? // @ts-expect-error Error typing is weird in ts... but we validate during runtime so should be OK
-        opts.error?.details
+      details: opts.error?.details != null
+        ? opts.error?.details
         : {}
     }
 

@@ -38,7 +38,7 @@ export class ValidationError extends ZHTTPError {
   ) {
     super(message)
 
-    if (details?.length) {
+    if (details != null && details.length > 0) {
       this.message = `${message}: ${details[0]?.message}`
     }
 

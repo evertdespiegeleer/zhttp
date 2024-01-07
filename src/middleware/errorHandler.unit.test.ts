@@ -46,7 +46,7 @@ describe('errorHandler', () => {
       .get('/bad-request')
       .expect(400)
       .end((err: any, res: Response) => {
-        if (err) { done(err); return }
+        if (err != null) { done(err); return }
         expect(res.body).to.have.property('meta')
         expect(res.body.meta.error).to.have.property('code', 'BadRequestError')
         done()
@@ -58,7 +58,7 @@ describe('errorHandler', () => {
       .get('/unique-violation')
       .expect(409)
       .end((err: any, res: Response) => {
-        if (err) { done(err); return }
+        if (err != null) { done(err); return }
         expect(res.body.meta.error).to.have.property('code', 'ConflictError')
         done()
       })

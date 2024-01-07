@@ -27,7 +27,7 @@ export class Middleware {
 
   get handler () {
     if (isPromise(this.options.handler)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return asyncMiddleware(this.options.handler as any) as RequestHandler
     }
     return this.options.handler as RequestHandler

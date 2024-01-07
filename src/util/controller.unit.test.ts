@@ -82,12 +82,14 @@ describe('controller', () => {
 
     bindControllerToApp(greetingController, app)
 
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     const helloRes = await supertest(app).get('/hello?name=Evert') as any
 
     expect(helloRes.status).to.be.equal(200)
     expect(helloRes.body).to.deep.eq(apiResponse('Hello Evert!'))
     expect(helloRes.body.meta).to.not.have.key('error')
 
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     const goodbyeRes = await supertest(app).get('/goodbye?name=Evert') as any
 
     expect(goodbyeRes.status).to.be.equal(200)
