@@ -43,7 +43,7 @@ jobs:
       - name: Publish to GitHub Package Registry
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
-          echo "@evertdespiegeleer:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "registry=https://npm.pkg.github.com" >> ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
           rm -f ~/.npmrc
       
