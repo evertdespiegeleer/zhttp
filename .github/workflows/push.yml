@@ -15,7 +15,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.ref_name }}
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Set Node.js 20.x
       uses: actions/setup-node@v3
@@ -43,7 +44,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.ref_name }}
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Set Node.js 20.x
       uses: actions/setup-node@v3
@@ -71,7 +73,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -120,7 +123,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -164,7 +168,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -207,7 +212,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
