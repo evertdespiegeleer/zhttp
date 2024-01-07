@@ -4,6 +4,7 @@
   "description": "An opinionated, type-safe http library build around Express and Zod",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
+  "files": ["./dist"],
   "type": "module",
   "author": "Evert De Spiegeleer",
   "license": "MIT",
