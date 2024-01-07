@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A minimal, strongly typed HTTP library with Zod validation",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
