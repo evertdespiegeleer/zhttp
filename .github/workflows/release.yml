@@ -48,9 +48,11 @@ jobs:
           rm -f ~/.npmrc
       
       - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+          npm publish
+          rm -f ~/.npmrc
 
       - name: Commit and push changes
         run: |
