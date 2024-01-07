@@ -104,9 +104,10 @@ jobs:
   
       - name: Publish to GitHub Package Registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "httpz:registry=https://npm.pkg.github.com" >> ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
-      
+
       - name: Commit and push changes
         run: |
           git commit -am "chore(version): 📦 bump version for prerelease"
@@ -151,7 +152,8 @@ jobs:
 
       - name: Publish to GitHub Package Registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "httpz:registry=https://npm.pkg.github.com" >> ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
       
       - name: Publish to npm
@@ -198,7 +200,8 @@ jobs:
   
       - name: Publish to GitHub Package Registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "httpz:registry=https://npm.pkg.github.com" >> ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
       
       - name: Publish to npm
@@ -245,7 +248,8 @@ jobs:
 
       - name: Publish to GitHub Package Registry
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> ~/.npmrc
+          echo "httpz:registry=https://npm.pkg.github.com" >> ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
       
       - name: Publish to npm
