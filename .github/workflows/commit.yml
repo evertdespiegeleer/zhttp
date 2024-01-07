@@ -41,3 +41,11 @@ jobs:
 
     - name: Test
       run: yarn test
+    
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Tests Report
+        path: test-report.xml
+        reporter: jest-junit
