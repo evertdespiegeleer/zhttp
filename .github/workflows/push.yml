@@ -14,8 +14,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }}
+      with:
+        ref: ${{ github.ref_name }}
 
     - name: Set Node.js 20.x
       uses: actions/setup-node@v3
@@ -42,8 +42,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }}
+      with:
+        ref: ${{ github.ref_name }}
 
     - name: Set Node.js 20.x
       uses: actions/setup-node@v3
