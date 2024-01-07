@@ -9,15 +9,16 @@ on:
       - main
 
 jobs:
+  audit:
+    uses: ./.github/workflows/audit.yml
+    name: audit
+
   pr-prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: audit
-        uses: ./audit.yml
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -59,14 +60,11 @@ jobs:
       #     NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
   patch-release:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: audit
-        uses: ./audit.yml
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -103,14 +101,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
   minor-release:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: audit
-        uses: ./audit.yml
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
@@ -147,14 +142,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
   major-release:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: audit
-        uses: ./audit.yml
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v3
