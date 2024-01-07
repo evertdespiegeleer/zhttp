@@ -4,6 +4,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
 import { type EndpointOasInfo } from '../oas.js'
 import { NotImplementedError, ValidationError } from './errors.js'
+import { isPromise } from 'util/types'
 
 const methods = [
   'get',
@@ -51,7 +52,7 @@ export interface EndpointOptions<
     inputs: z.infer<InputsSchema>,
     req: Request,
     res: Response,
-  ) => Promise<z.infer<OutputSchema>>
+  ) => Promise<z.infer<OutputSchema>> | z.infer<OutputSchema>
   inputValidationSchema?: InputsSchema
   responseValidationSchema?: OutputSchema
   responseContentType: string
@@ -267,14 +268,18 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
 
     const { params, query, body } = req
 
-    if (endpoint.getHandler() == null) {
+    const handler = endpoint.getHandler()
+
+    if (handler == null) {
       next(new NotImplementedError())
       return
     }
 
-    endpoint
-      .getHandler()?.({ params, query, body }, req, res)
-      .then((responseObj) => {
+    // Turn any hanler, async or not, into an async handler
+    const asyncHandler = isPromise(handler) ? handler : async (input: Parameters<typeof handler>[0], req: Parameters<typeof handler>[1], res: Parameters<typeof handler>[2]): Promise<ReturnType<typeof handler>> => handler(input, req, res)
+
+    asyncHandler({ params, query, body }, req, res)
+      .then((responseObj: any) => {
         // Output validation
         try {
           endpoint.getResponseValidationSchema()?.parse(responseObj)
@@ -287,7 +292,7 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
         res.header('content-type', endpoint.getResponseContentType())
         res.send(responseObj)
       })
-      .catch((e) => {
+      .catch((e: any) => {
         next(e)
       })
   }
