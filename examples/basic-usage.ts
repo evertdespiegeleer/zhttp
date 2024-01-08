@@ -1,10 +1,3 @@
-![zhttp, a minimal, strongly typed HTTP library with Zod validation](./.readme-files/header.png)
-
-## Usage example
-
-```ts
-// ./examples/basic-usage.ts
-
 import { z } from 'zod'
 import {
   Server,
@@ -12,6 +5,7 @@ import {
   get,
   extendZodWithOpenApi,
   zApiOutput,
+  apiResponse
 } from '../src/main.js'
 
 extendZodWithOpenApi(z)
@@ -59,5 +53,3 @@ const server = new Server({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 server.start()
-
-```
