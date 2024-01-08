@@ -1,9 +1,9 @@
-import z, { ZodRawShape, ZodString } from 'zod';
-import { ZodObject, ZodSchema } from 'zod';
-import type { NextFunction, Request, Response } from 'express';
-import { Middleware } from './middleware.js';
-import { EndpointOasInfo } from '../oas.js';
-import { NotImplementedError, ValidationError } from './errors.js';
+import { type ZodRawShape, type ZodString, type ZodObject, type ZodSchema } from 'zod'
+import type z from 'zod'
+import type { NextFunction, Request, Response } from 'express'
+import { type Middleware } from './middleware.js'
+import { type EndpointOasInfo } from '../oas.js'
+import { NotImplementedError, ValidationError } from './errors.js'
 
 const methods = [
   'get',
@@ -13,77 +13,77 @@ const methods = [
   'head',
   'options',
   'patch',
-  'trace',
-] as const;
-export type Method = (typeof methods)[number];
+  'trace'
+] as const
+export type Method = (typeof methods)[number]
 
 type ExtractRouteParams<Path extends string> = string extends Path
   ? Record<string, ZodString>
   : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Path extends `${infer _Start}:${infer Param}/${infer Rest}`
+  Path extends `${infer _Start}:${infer Param}/${infer Rest}`
     ? { [K in Param | keyof ExtractRouteParams<Rest>]?: ZodString }
     : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Path extends `${infer _Start}:${infer Param}`
+    Path extends `${infer _Start}:${infer Param}`
       ? { [K in Param]: ZodString }
-      : ZodRawShape;
+      : ZodRawShape
 
 export type InputValidationSchema<Path extends string> = ZodObject<{
-  params?: ZodObject<ExtractRouteParams<Path>>;
-  query?: ZodObject<Record<string, ZodSchema>>;
-  body?: ZodSchema;
-}>;
+  params?: ZodObject<ExtractRouteParams<Path>>
+  query?: ZodObject<Record<string, ZodSchema>>
+  body?: ZodSchema
+}>
 
-export type ResponseValidationSchema = ZodSchema;
+export type ResponseValidationSchema = ZodSchema
 
 export interface EndpointOptions<
   Path extends string,
   InputsSchema extends
-    InputValidationSchema<Path> = InputValidationSchema<Path>,
+  InputValidationSchema<Path> = InputValidationSchema<Path>,
   OutputSchema extends ResponseValidationSchema = ResponseValidationSchema,
 > {
-  method: Method;
-  path: Path;
-  name?: string;
-  description?: string;
-  oasInfo?: Partial<EndpointOasInfo>;
+  method: Method
+  path: Path
+  name?: string
+  description?: string
+  oasInfo?: Partial<EndpointOasInfo>
   // TODO: everything inside inputs is actually part of req. Maybe it shouldn't be passed as a separate object?
   handler?: (
     inputs: z.infer<InputsSchema>,
     req: Request,
     res: Response,
-  ) => Promise<z.infer<OutputSchema>>;
-  inputValidationSchema?: InputsSchema;
-  responseValidationSchema?: OutputSchema;
-  responseContentType: string;
-  middlewares?: Middleware[];
+  ) => Promise<z.infer<OutputSchema>>
+  inputValidationSchema?: InputsSchema
+  responseValidationSchema?: OutputSchema
+  responseContentType: string
+  middlewares?: Middleware[]
 }
 
 export class Endpoint<
   Path extends string = string,
   InputsSchema extends
-    InputValidationSchema<Path> = InputValidationSchema<Path>,
+  InputValidationSchema<Path> = InputValidationSchema<Path>,
   OutputSchema extends ResponseValidationSchema = ResponseValidationSchema,
 > {
-  constructor(
-    private options: EndpointOptions<Path, InputsSchema, OutputSchema>,
+  constructor (
+    private readonly options: EndpointOptions<Path, InputsSchema, OutputSchema>
   ) {}
 
   /** Add a description to the endpoint */
-  description(description: (typeof this.options)['description']) {
-    this.options.description = description;
-    return this;
+  description (description: (typeof this.options)['description']) {
+    this.options.description = description
+    return this
   }
 
   /** Name the endpoint */
-  name(name: (typeof this.options)['name']) {
-    this.options.name = name;
-    return this;
+  name (name: (typeof this.options)['name']) {
+    this.options.name = name
+    return this
   }
 
   /** Add openapi properties to the endpoint, which will be reflected in the openapi spec */
-  oas(oasInfo: (typeof this.options)['oasInfo']) {
-    this.options.oasInfo = oasInfo;
-    return this;
+  oas (oasInfo: (typeof this.options)['oasInfo']) {
+    this.options.oasInfo = oasInfo
+    return this
   }
 
   /** Specify a zod input schema for the endpoint.
@@ -101,12 +101,12 @@ export class Endpoint<
    * ```
    * */
   input<NewInputsSchema extends InputValidationSchema<Path>>(
-    inputValidationSchema: NewInputsSchema,
+    inputValidationSchema: NewInputsSchema
   ) {
     return new Endpoint<Path, NewInputsSchema, OutputSchema>({
       ...this.options,
-      inputValidationSchema,
-    });
+      inputValidationSchema
+    })
   }
 
   /** Specify a zod output schema for the endpoint. Corresponds to the body of the HTTP response.
@@ -119,12 +119,12 @@ export class Endpoint<
    * ```
    * */
   response<NewOutputSchema extends OutputSchema>(
-    responseValidationSchema: NewOutputSchema,
+    responseValidationSchema: NewOutputSchema
   ) {
     return new Endpoint<Path, InputsSchema, NewOutputSchema>({
       ...this.options,
-      responseValidationSchema,
-    });
+      responseValidationSchema
+    })
   }
 
   /**
@@ -135,9 +135,9 @@ export class Endpoint<
    *.responseContentType('text/plain')
    * ```
    * */
-  responseContentType(contentType: string) {
-    this.options.responseContentType = contentType;
-    return this;
+  responseContentType (contentType: string) {
+    this.options.responseContentType = contentType
+    return this
   }
 
   /** Define the handler of the endpoint. Should be an async function.
@@ -152,124 +152,124 @@ export class Endpoint<
    * })
    * ```
    * */
-  handler(
+  handler (
     handler: (
       inputs: z.infer<InputsSchema>,
       req: Request,
       res: Response,
-    ) => Promise<z.infer<OutputSchema>>,
+    ) => Promise<z.infer<OutputSchema>>
   ) {
-    this.options.handler = handler;
-    return this;
+    this.options.handler = handler
+    return this
   }
 
   /** Add an array of middlewares to the endpoint */
-  middlewares(middlewares: Middleware[]) {
+  middlewares (middlewares: Middleware[]) {
     this.options.middlewares = [
       ...(this.options.middlewares ?? []),
-      ...middlewares,
-    ];
-    return this;
+      ...middlewares
+    ]
+    return this
   }
 
   /** Add a middleware to the endpoint */
-  middleware(middleware: Middleware) {
+  middleware (middleware: Middleware) {
     this.options.middlewares = [
       ...(this.options.middlewares ?? []),
-      middleware,
-    ];
-    return this;
+      middleware
+    ]
+    return this
   }
 
-  getName() {
-    return this.options.name;
+  getName () {
+    return this.options.name
   }
 
-  getDescription() {
-    return this.options.description;
+  getDescription () {
+    return this.options.description
   }
 
-  getMiddlewares() {
-    return this.options.middlewares;
+  getMiddlewares () {
+    return this.options.middlewares
   }
 
-  getHandler() {
-    return this.options.handler;
+  getHandler () {
+    return this.options.handler
   }
 
-  getOasInfo() {
-    return this.options.oasInfo;
+  getOasInfo () {
+    return this.options.oasInfo
   }
 
-  getMethod() {
-    return this.options.method;
+  getMethod () {
+    return this.options.method
   }
 
-  getPath() {
-    return this.options.path;
+  getPath () {
+    return this.options.path
   }
 
-  getInputValidationSchema() {
-    return this.options.inputValidationSchema;
+  getInputValidationSchema () {
+    return this.options.inputValidationSchema
   }
 
-  getResponseValidationSchema() {
-    return this.options.responseValidationSchema;
+  getResponseValidationSchema () {
+    return this.options.responseValidationSchema
   }
 
-  getResponseContentType() {
-    return this.options.responseContentType;
+  getResponseContentType () {
+    return this.options.responseContentType
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyEndpoint = Endpoint<any, any>;
+export type AnyEndpoint = Endpoint<any, any>
 
 /** Define a new endpoint */
 export const endpoint = <Path extends string>(
   method: Method,
   path: Path,
-  name?: string,
+  name?: string
 ) =>
-  new Endpoint<Path>({
-    name,
-    method,
-    path,
-    responseContentType: 'application/json',
-  });
+    new Endpoint<Path>({
+      name,
+      method,
+      path,
+      responseContentType: 'application/json'
+    })
 
 /** Define a new GET endpoint */
 export const get = <Path extends string>(path: Path, name?: string) =>
-  endpoint('get', path, name);
+  endpoint('get', path, name)
 
 /** Define a new PUT endpoint */
 export const put = <Path extends string>(path: Path, name?: string) =>
-  endpoint('put', path, name);
+  endpoint('put', path, name)
 
 /** Define a new POST endpoint */
 export const post = <Path extends string>(path: Path, name?: string) =>
-  endpoint('post', path, name);
+  endpoint('post', path, name)
 
 /** Define a new DELETE endpoint */
 export const del = <Path extends string>(path: Path, name?: string) =>
-  endpoint('delete', path, name);
+  endpoint('delete', path, name)
 
 export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
   const endpointHandler = (req: Request, res: Response, next: NextFunction) => {
     // Input validation
     try {
-      endpoint.getInputValidationSchema()?.parse(req);
+      endpoint.getInputValidationSchema()?.parse(req)
     } catch (error) {
-      const e = error as z.ZodError;
-      next(new ValidationError(e.message, e.issues));
-      return;
+      const e = error as z.ZodError
+      next(new ValidationError(e.message, e.issues))
+      return
     }
 
-    const { params, query, body } = req;
+    const { params, query, body } = req
 
     if (endpoint.getHandler() == null) {
-      next(new NotImplementedError());
-      return;
+      next(new NotImplementedError())
+      return
     }
 
     endpoint
@@ -277,21 +277,20 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
       .then((responseObj) => {
         // Output validation
         try {
-          endpoint.getResponseValidationSchema()?.parse(responseObj);
+          endpoint.getResponseValidationSchema()?.parse(responseObj)
         } catch (error) {
-          const e = error as z.ZodError;
-          next(new ValidationError(e.message, e.issues));
-          return;
+          const e = error as z.ZodError
+          next(new ValidationError(e.message, e.issues))
+          return
         }
 
-        res.header('content-type', endpoint.getResponseContentType());
-        res.send(responseObj);
+        res.header('content-type', endpoint.getResponseContentType())
+        res.send(responseObj)
       })
       .catch((e) => {
-        next(e);
-        return;
-      });
-  };
+        next(e)
+      })
+  }
 
-  return endpointHandler;
-};
+  return endpointHandler
+}
