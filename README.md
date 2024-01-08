@@ -12,6 +12,7 @@ import {
   get,
   extendZodWithOpenApi,
   zApiOutput,
+  apiResponse
 } from '../src/main.js'
 
 extendZodWithOpenApi(z)
