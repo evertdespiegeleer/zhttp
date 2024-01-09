@@ -78,7 +78,7 @@ export class Oas {
       summary: name,
       description: endpoint.getDescription(),
       method: endpoint.getMethod(),
-      path: endpoint.getPath(),
+      path: endpoint.getPath().replace(/:(\w+)/g, '{$1}'),
       tags: controllerName != null ? [controllerName] : undefined,
       request: {
         params: endpoint.getInputValidationSchema()?.shape.params,
