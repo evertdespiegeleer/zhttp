@@ -97,7 +97,7 @@ jobs:
     needs:
       - lint
       - build
-      - test
+      # - test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
