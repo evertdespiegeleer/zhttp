@@ -35,9 +35,9 @@ export class Server {
   private readonly loggerInstance
 
   constructor (
-    private readonly application: Application,
     private readonly options: RoutingOptions = {},
-    private readonly httpOptions: IHTTPOptions = {}
+    private readonly httpOptions: IHTTPOptions = {},
+    private readonly application?: Application
   ) {
     this.logger = httpOptions.logger ?? defaultLogger
     this.loggerInstance = this.logger('zhttp')
