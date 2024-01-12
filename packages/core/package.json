@@ -9,12 +9,12 @@
   },
   "version": "0.0.8-fix-esm-cjs-issues.0",
   "type": "module",
-  "main": "./dist/cjs/main.js",
+  "main": "./dist/cjs/main.cjs",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/main.d.ts",
   "exports": {
     "import": "./dist/esm/main.js",
-    "require": "./dist/cjs/main.js"
+    "require": "./dist/cjs/main.cjs"
   },
   "files": [
     "./dist",
@@ -27,7 +27,7 @@
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.build.esm.json",
-    "build:cjs": "tsc -p tsconfig.build.cjs.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json && ./scripts/fix-cjs.sh",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/{**/,}*.test.ts"
   },
   "dependencies": {
