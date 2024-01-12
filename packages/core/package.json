@@ -16,7 +16,7 @@
     "./readme.md"
   ],
   "engines": {
-    "node": "20.x.x",
+    "node": "^20.10.x",
     "npm": "^10.2.3"
   },
   "scripts": {
