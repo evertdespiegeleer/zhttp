@@ -6,7 +6,7 @@ import z from 'zod'
 import { zApiOutput, apiResponse } from './apiResponse.js'
 import { type Response, type Request, type NextFunction } from 'express'
 import sinon from 'sinon'
-import { NotImplementedError, ValidationError } from './errors.js'
+import { NotImplementedError, ValidationError } from '@zhttp/errors'
 import { expect } from 'chai'
 
 const promisifyExpressHandler = async (

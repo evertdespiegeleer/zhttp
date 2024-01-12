@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn run sync:readme
+npm run sync:readme
 git add ./*.md
 

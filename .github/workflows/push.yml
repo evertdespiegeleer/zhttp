@@ -18,16 +18,16 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.x
+    - name: Set Node.js 20.11.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.x
+        node-version: 20.11.0
 
     - name: Install Dependencies
-      run: yarn install --frozen-lockfile
+      run: npm ci
 
     - name: Lint
-      run: yarn lint
+      run: npm run lint
 
   build:
     runs-on: ubuntu-latest
@@ -38,22 +38,22 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.x
+    - name: Set Node.js 20.11.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.x
+        node-version: 20.11.0
 
     - name: Install Dependencies
-      run: yarn install --frozen-lockfile
+      run: npm ci
 
     - name: Build
-      run: yarn build
+      run: npm run build
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: ./dist
+        path: ./packages/*/dist
   
   test:
     runs-on: ubuntu-latest
@@ -67,22 +67,29 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.x
+    - name: Set Node.js 20.11.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.x
+        node-version: 20.11.0
 
     - name: Install Dependencies
-      run: yarn install --frozen-lockfile
-
+      run: npm ci
+      
     - name: Test
-      run: yarn test
+      id: test
+      run: npm run test
+    
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: test
+        path: ./packages/*/test-report.xml
     
     - name: Test Report
+      if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: test-report.xml
-      if: always()
+        files: ./packages/*/test-report.xml
   
   pr-prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -98,19 +105,19 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set Node.js 20.x
+      - name: Set Node.js 20.11.0
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: 20.11.0
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./dist
+          path: ./packages
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       
       - name: Extract branch name
         shell: bash
@@ -120,17 +127,18 @@ jobs:
       - name: Configure Git
         uses: fregante/setup-git-user@v1
 
-      - name: Version the package
+      - name: Version the packages
         id: version
         run: |
-          export VERSION=$(npm version --no-commit-hooks --no-git-tag-version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//'))
+          ./scripts/version.sh prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
+          export VERSION=$(cat package.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       
       - name: Publish to npm
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
           echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --access=public --tag prerelease
+          npm publish --workspaces --access=public --tag prerelease
           rm -f ~/.npmrc
 
       - name: Commit and push changes

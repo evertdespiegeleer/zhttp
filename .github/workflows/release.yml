@@ -23,32 +23,35 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
 
-      - name: Set Node.js 20.x
+      - name: Set Node.js 20.10
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: 20.10
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Configure Git
         uses: fregante/setup-git-user@v1
           
-      - name: Version the package
+      - name: Version the packages
         id: version
-        run: npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }}
+        run: |
+          ./scripts/version.sh ${{ github.event.inputs.release-type }}
+          export VERSION=$(cat package.json | jq -r '.version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       
       - name: Publish to npm
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
           echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --access=public
+          npm publish --workspaces --access=public
           rm -f ~/.npmrc
 
       - name: Commit and push changes
         run: |
-          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.stdout }}"
+          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.version }}"
           git push

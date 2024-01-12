@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express'
 import { MiddlewareTypes, middleware } from '../util/middleware.js'
 import { apiResponse } from '../util/apiResponse.js'
-import { ConflictError, ZHTTPError, InternalServerError } from '../util/errors.js'
+import { ConflictError, ZHTTPError, InternalServerError } from '@zhttp/errors'
 import { type ILogger } from '../util/logger.js'
 
 export const makeErrorHandlerMiddleware = (logger: ILogger) => middleware({

@@ -15,7 +15,6 @@ export { openapiController } from './controllers/openapi.js'
 export { controller } from './util/controller.js'
 
 export * from './util/middleware.js'
-export * as errors from './util/errors.js'
 
 export { apiResponse, zApiOutput } from './util/apiResponse.js'
 export { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'

@@ -9,7 +9,7 @@ import { type Middleware, MiddlewareTypes } from './util/middleware.js'
 import { makeErrorHandlerMiddleware } from './middleware/errorHandler.js'
 import { metricMiddleware } from './middleware/metrics.js'
 import { type OASInfo, Oas } from './oas.js'
-import { BadRequestError } from './util/errors.js'
+import { BadRequestError } from '@zhttp/errors'
 import { type ILogger, defaultLogger } from './util/logger.js'
 
 interface RoutingOptions {

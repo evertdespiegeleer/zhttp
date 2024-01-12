@@ -7,7 +7,12 @@
     "extends": "standard-with-typescript",
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": [
+          "./tsconfig.json",
+          "./packages/*/tsconfig.json",
+          "./examples/tsconfig.json"
+        ]
     },
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off"
@@ -16,7 +21,7 @@
         {
           "files": ["*.test.ts"],
           "rules": {
-            // Disable on test files so we can usu chai `...to.be.undefined` style syntax
+            // Disable on test files so we can use chai `...to.be.undefined` style syntax
             "@typescript-eslint/no-unused-expressions": "off"
           }
         }
