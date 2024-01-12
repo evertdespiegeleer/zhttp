@@ -1,5 +1,4 @@
-import { type RequestHandler, type ErrorRequestHandler } from 'express'
-import asyncMiddleware from 'middleware-async'
+import { type RequestHandler, type ErrorRequestHandler, type Request, type Response, type NextFunction } from 'express'
 import { isPromise } from 'node:util/types'
 
 export enum MiddlewareTypes {
@@ -7,10 +6,46 @@ export enum MiddlewareTypes {
   AFTER,
 }
 
+export type AsyncRequestHandler = (...args: Parameters<RequestHandler>) => Promise<ReturnType<RequestHandler>>
+
+export type AsyncErrorRequestHandler = (...args: Parameters<ErrorRequestHandler>) => Promise<ReturnType<ErrorRequestHandler>>
+
 export type MiddlewareHandler =
   | RequestHandler
   | ErrorRequestHandler
-  | Promise<RequestHandler | ErrorRequestHandler>
+  | AsyncRequestHandler
+  | AsyncErrorRequestHandler
+
+function middlewareWrapper (middlewareHandler: MiddlewareHandler) {
+  return function (prevError: Error, req: Request, res: Response, next: NextFunction) {
+    try {
+      if (isPromise(middlewareHandler)) {
+        new Promise((resolve, reject) => {
+          const localNext: NextFunction = (...params) => {
+            resolve(...params)
+          }
+          if (middlewareHandler.arguments.length === 3) {
+            const m = middlewareHandler as AsyncRequestHandler
+            m(req, res, localNext).then(resolve).catch(reject)
+          } else {
+            const m = middlewareHandler as AsyncErrorRequestHandler
+            m(prevError, req, res, localNext).then(resolve).catch(reject)
+          }
+        }).then(next).catch(next)
+      }
+
+      if (middlewareHandler.length === 3) {
+        const m = middlewareHandler as RequestHandler
+        m(req, res, next)
+      } else {
+        const m = middlewareHandler as ErrorRequestHandler
+        m(prevError, req, res, next)
+      }
+    } catch (err) {
+      next(err)
+    }
+  }
+}
 
 interface MiddlewareProps {
   name?: string
@@ -26,11 +61,7 @@ export class Middleware {
   }
 
   get handler () {
-    if (isPromise(this.options.handler)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return asyncMiddleware(this.options.handler as any) as RequestHandler
-    }
-    return this.options.handler as RequestHandler
+    return middlewareWrapper(this.options.handler)
   }
 }
 
