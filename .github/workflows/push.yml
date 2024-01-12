@@ -80,6 +80,7 @@ jobs:
       run: npm run test
     
     - name: Test Report
+      if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: ./packages/*/test-report.xml
@@ -107,7 +108,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./
+          path: ./packages
 
       - name: Install Dependencies
         run: npm ci
