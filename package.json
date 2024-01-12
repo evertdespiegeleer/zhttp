@@ -11,19 +11,18 @@
   "type": "module",
   "engines": {
     "node": "20.x.x",
-    "yarn": "^4.0.2"
+    "npm": "^10.2.3"
   },
   "workspaces": [
     "packages/errors",
     "packages/*"
   ],
   "scripts": {
-    "build:libs": "yarn workspaces foreach -A -t run \"build\"",
-    "preinstall": "npx only-allow yarn",
+    "build:libs": "npm run build --workspaces --if-present",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./packages/*/src/**/*.test.ts",
     "prepare": "husky install",
     "lint": "eslint 'packages/*/src/**/*.ts'",
-    "lint:fix": "yarn run lint --fix",
+    "lint:fix": "npm run lint -- --fix",
     "sync:readme": "npx embedme ./readme.md"
   },
   "devDependencies": {
@@ -42,10 +41,10 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^8.0.0",
+    "lerna": "^8.0.2",
     "sinon": "^17.0.1",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^4.4.4"
-  },
-  "packageManager": "yarn@4.0.2"
+  }
 }

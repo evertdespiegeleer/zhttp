@@ -29,10 +29,10 @@ jobs:
           node-version: 20.x
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Configure Git
         uses: fregante/setup-git-user@v1
