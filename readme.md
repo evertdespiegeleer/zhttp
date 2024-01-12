@@ -152,42 +152,31 @@ Controllers do **not** serve as routers. Every endpoint path should be a _comple
 ### Basic controller example
 
 ```ts
-// ./examples/concept-endpoint.ts
+// ./examples/concept-controller.ts
 
 import { z } from 'zod'
-import { endpoint, get } from '@zhttp/core'
+import { controller, get } from "@zhttp/core";
 
-const zGreetingOutput = z.object({
-    message: z.string()
-})
+export const greetingController = controller('greeting')
+.description('A controller that greets the world.')
 
-const zGreetingInput = z.object({
-    query: z.object({
-        name: z.string().optional()
-    })
-})
-
-// ⬇ For common http methods (get, post, put, del), utility functions are available:
-get('/hello', 'getGreeting')
+greetingController.endpoint(
+    get('/hello', 'getGreeting')
     .description('Say hello to everyone')
-    .input(zGreetingInput)
-    .response(zGreetingOutput)
+    .input(z.object({
+        query: z.object({
+            name: z.string().optional()
+        })
+    }))
+    .response(z.object({
+        message: z.string()
+    }))
     .handler(async ({ query }) => {
         return {
             message: `Hello ${query.name ?? 'everyone'}!`
         }
     })
-
-// `endpoint` is a generic function which supports every http method.
-endpoint('get', '/goodbye', 'getGoodbye')
-    .description('Say goodbye to everyone')
-    .input(zGreetingInput)
-    .response(zGreetingOutput)
-    .handler(async ({ query }) => {
-        return {
-            message: `Goodbye ${query.name ?? 'everyone'}!`
-        }
-    })
+)
 ```
 
 ## Server
@@ -212,6 +201,8 @@ const server = new Server({
 server.start()
 
 ```
+
+# Errors
 
 # Order of execution
 - Server 'BEFORE' middlewares
