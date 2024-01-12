@@ -18,10 +18,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.10
+    - name: Set Node.js 20.10.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.10
+        node-version: 20.10.0
 
     - name: Install Dependencies
       run: npm ci
@@ -38,10 +38,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.10
+    - name: Set Node.js 20.10.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.10
+        node-version: 20.10.0
 
     - name: Install Dependencies
       run: npm ci
@@ -67,10 +67,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.10
+    - name: Set Node.js 20.10.0
       uses: actions/setup-node@v3
       with:
-        node-version: 20.10
+        node-version: 20.10.0
 
     - name: Install Dependencies
       run: npm ci
@@ -78,6 +78,12 @@ jobs:
     - name: Test
       id: test
       run: npm run test
+    
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: test
+        path: ./packages/*/test-report.xml
     
     - name: Test Report
       if: always()
@@ -99,10 +105,10 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set Node.js 20.10
+      - name: Set Node.js 20.10.0
         uses: actions/setup-node@v3
         with:
-          node-version: 20.10
+          node-version: 20.10.0
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
