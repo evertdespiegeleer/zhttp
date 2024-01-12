@@ -8,7 +8,7 @@
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
   "type": "module",
-  "version": "0.0.6",
+  "version": "0.0.7-feat-support-commonjs.0",
   "main": "./dist/cjs/main.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/main.d.ts",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "@zhttp/errors": "0.0.6",
+    "@zhttp/errors": "0.0.7-feat-support-commonjs.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -58,7 +58,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@zhttp/errors": "0.0.6",
+    "@zhttp/errors": "0.0.7-feat-support-commonjs.0",
     "zod": "^3.22.4"
   }
 }

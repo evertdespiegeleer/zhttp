@@ -8,7 +8,7 @@
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
   "type": "module",
-  "version": "0.0.6",
+  "version": "0.0.7-feat-support-commonjs.0",
   "main": "./dist/cjs/main.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/main.d.ts",
