@@ -36,7 +36,8 @@ export class Server {
 
   constructor (
     private readonly options: RoutingOptions = {},
-    private readonly httpOptions: IHTTPOptions = {}
+    private readonly httpOptions: IHTTPOptions = {},
+    private readonly application?: Application
   ) {
     this.logger = httpOptions.logger ?? defaultLogger
     this.loggerInstance = this.logger('zhttp')
@@ -49,7 +50,7 @@ export class Server {
       ...this.httpOptions
     }
 
-    this.app = express()
+    this.app = application ?? express()
     this.httpServer = createServer(this.app)
 
     this.app.set('trust proxy', this.httpOptions.trustProxy)
