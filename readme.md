@@ -205,6 +205,10 @@ server.start()
 
 ```
 
+# OpenAPI
+
+The package exports a special controller `openapiController`. When used, this controller exposes routes `/openapi.json` (the OpenAPI json spec) and `/api.html` (a [RapiDoc](https://rapidocweb.com/) api interface).
+
 # Errors
 
 # Order of execution
