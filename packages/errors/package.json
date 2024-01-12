@@ -27,7 +27,7 @@
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.build.esm.json",
-    "build:cjs": "tsc -p tsconfig.build.cjs.json && ./scripts/fix-cjs.sh",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
     "test": "echo \"No tests here :)\""
   },
   "dependencies": {
