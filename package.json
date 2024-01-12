@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.7",
+  "version": "0.0.8-fix-esm-cjs-issues.0",
   "type": "module",
   "engines": {
     "node": "^20.10.x",
