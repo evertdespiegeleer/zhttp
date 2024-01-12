@@ -8,6 +8,7 @@
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
   "version": "0.0.7",
+  "type": "module",
   "main": "./dist/cjs/main.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/main.d.ts",
