@@ -107,7 +107,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./packages/*/dist
+          path: ./
 
       - name: Install Dependencies
         run: npm ci
