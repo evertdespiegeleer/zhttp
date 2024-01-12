@@ -39,7 +39,10 @@ jobs:
           
       - name: Version the package
         id: version
-        run: npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }}
+        run: |
+          export VERSION=$(npm version --no-commit-hooks --no-git-tag-version ${{ github.event.inputs.release-type }})
+          yarn workspaces foreach -A -t --no-private exec "npm version $VERSION --no-commit-hooks --no-git-tag-version"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       
       - name: Publish to npm
         run: |
@@ -50,5 +53,5 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.stdout }}"
+          git commit -am "chore(version): 📦 ${{ github.event.inputs.release-type }} version bump to ${{ steps.version.outputs.version }}"
           git push

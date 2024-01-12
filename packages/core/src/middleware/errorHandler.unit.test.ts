@@ -4,7 +4,7 @@ import supertest, { type Response } from 'supertest'
 import { expect } from 'chai'
 import { describe, it, before, after } from 'node:test'
 import { controller, get } from '../main.js'
-import { BadRequestError, ConflictError } from '../util/errors.js'
+import { BadRequestError, ConflictError } from '@zhttp/errors'
 
 describe('errorHandler', () => {
   let http: Server

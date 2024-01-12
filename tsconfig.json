@@ -16,8 +16,8 @@
         "sourceMap": true,
         "declaration": true,
 
-        //   "composite": true,
-        //   "declarationMap": true,
+        // "composite": true,
+        "declarationMap": true,
 
         "lib": [
             "es2022"
@@ -28,5 +28,7 @@
           "*": ["node_modules/*"],
         }
     },
-    "include": ["src/**/*"]
+    "include": [
+        "packages/*/src/**/*.ts",
+    ],
 }

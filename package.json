@@ -1,52 +1,39 @@
 {
-  "name": "@zhttp/core",
-  "description": "A minimal, strongly typed HTTP library with Zod validation",
+  "name": "@zhttp/monorepo",
   "author": "Evert De Spiegeleer",
   "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
   "version": "0.0.5",
   "type": "module",
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
-  "files": [
-    "./dist",
-    "./readme.md"
-  ],
   "engines": {
     "node": "20.x.x",
-    "yarn": "^1.22.0"
+    "yarn": "^4.0.2"
   },
+  "workspaces": [
+    "packages/errors",
+    "packages/*"
+  ],
   "scripts": {
+    "build:libs": "yarn workspaces foreach -A -t run \"build\"",
     "preinstall": "npx only-allow yarn",
-    "build": "tsc -p tsconfig.build.json",
-    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts",
+    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./packages/*/src/**/*.test.ts",
     "prepare": "husky install",
-    "lint": "yarn eslint 'src/**/*.ts'",
+    "lint": "eslint 'packages/*/src/**/*.ts'",
     "lint:fix": "yarn run lint --fix",
     "sync:readme": "npx embedme ./readme.md"
   },
-  "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "prom-client": "^15.1.0",
-    "uuid": "^9.0.1",
-    "zod": "^3.22.4"
-  },
   "devDependencies": {
     "@types/chai": "^4.3.11",
-    "@types/cookie-parser": "^1.4.6",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
     "@types/node": "^20.10.6",
     "@types/sinon": "^17.0.2",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.18.1",
     "chai": "^5.0.0",
     "devmoji": "^2.3.0",
     "eslint": "^8.0.1",
@@ -55,13 +42,10 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^8.0.0",
-    "macha": "^0.0.0",
     "sinon": "^17.0.1",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
-    "typescript": "*"
+    "typescript": "^4.4.4"
   },
-  "peerDependencies": {
-    "zod": "^3.22.4"
-  }
+  "packageManager": "yarn@4.0.2"
 }

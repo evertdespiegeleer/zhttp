@@ -2,9 +2,13 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
+        "rootDir": "..",
         "paths": {
-            "@zhttp/core*": ["../src", "../src/main.ts", "../src/*"],
+            "@zhttp/core*": ["../packages/core/src", "../packages/core/src/main.ts", "../packages/core/src/*"],
         }
     },
-    "include": ["*"],
+    "include": [
+        "./*.ts",
+        "../**/*.ts"
+    ],
 }

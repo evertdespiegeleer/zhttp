@@ -3,7 +3,7 @@ import type z from 'zod'
 import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
 import { type EndpointOasInfo } from '../oas.js'
-import { NotImplementedError, ValidationError } from './errors.js'
+import { NotImplementedError, ValidationError } from '@zhttp/errors'
 
 const methods = [
   'get',
