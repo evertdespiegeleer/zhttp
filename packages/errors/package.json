@@ -17,10 +17,11 @@
   ],
   "engines": {
     "node": "20.x.x",
-    "npm": "^10.3.0"
+    "npm": "^10.2.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
     "zod": "^3.22.4"

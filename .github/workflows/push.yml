@@ -81,7 +81,7 @@ jobs:
     - name: Test Report
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: test-report.xml
+        files: ./packages/*/test-report.xml
       if: always()
   
   pr-prerelease:

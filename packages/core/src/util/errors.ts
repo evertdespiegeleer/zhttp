@@ -1,4 +1,3 @@
-/* c8 ignore start */
 import { type ZodIssue as ZValidationError } from 'zod'
 
 export class ZHTTPError extends Error {
@@ -95,4 +94,3 @@ export class TooManyRequestsError extends ZHTTPError {
     this.http = 429
   }
 }
-/* c8 ignore stop */

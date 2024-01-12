@@ -11,15 +11,15 @@
   "type": "module",
   "engines": {
     "node": "20.x.x",
-    "npm": "^10.3.0"
+    "npm": "^10.2.3"
   },
   "workspaces": [
     "packages/errors",
     "packages/*"
   ],
   "scripts": {
-    "build:libs": "npm run build --workspaces --if-present",
-    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./packages/*/src/**/*.test.ts",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
     "prepare": "husky install",
     "lint": "eslint 'packages/*/src/**/*.ts'",
     "lint:fix": "npm run lint -- --fix",
