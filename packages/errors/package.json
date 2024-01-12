@@ -7,11 +7,15 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.6",
   "type": "module",
+  "version": "0.0.6",
   "main": "./dist/cjs/main.js",
   "module": "./dist/esm/index.js",
-  "types": "./dist/main.d.ts",
+  "types": "./dist/esm/main.d.ts",
+  "exports": {
+    "import": "./dist/esm/main.js",
+    "require": "./dist/cjs/main.js"
+  },
   "files": [
     "./dist",
     "./readme.md"
