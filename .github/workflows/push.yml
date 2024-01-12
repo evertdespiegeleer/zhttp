@@ -123,15 +123,15 @@ jobs:
       - name: Version the packages
         id: version
         run: |
-          export VERSION=$(npm version --no-commit-hooks --no-git-tag-version prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//'))
-          yarn workspaces foreach -A -t --no-private exec "npm version $VERSION --no-commit-hooks --no-git-tag-version"
+          ./scripts/version.sh prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//'))
+          export VERSION=$(cat package.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       
       - name: Publish to npm
         run: |
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
           echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --access=public --tag prerelease
+          npm publish --workspaces --access=public --tag prerelease
           rm -f ~/.npmrc
 
       - name: Commit and push changes

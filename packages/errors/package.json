@@ -17,7 +17,7 @@
   ],
   "engines": {
     "node": "20.x.x",
-    "yarn": "^4.0.2"
+    "npm": "^10.3.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
