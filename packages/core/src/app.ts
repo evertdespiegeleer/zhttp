@@ -35,6 +35,7 @@ export class Server {
   private readonly loggerInstance
 
   constructor (
+    private readonly application: Application,
     private readonly options: RoutingOptions = {},
     private readonly httpOptions: IHTTPOptions = {}
   ) {
@@ -49,7 +50,7 @@ export class Server {
       ...this.httpOptions
     }
 
-    this.app = express()
+    this.app = application ?? express()
     this.httpServer = createServer(this.app)
 
     this.app.set('trust proxy', this.httpOptions.trustProxy)

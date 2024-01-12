@@ -3,7 +3,7 @@
 # Installation
 
 ```sh
-npm install @zhttp/core @zhttp/errors
+npm install @zhttp/core @zhttp/errors zod
 ```
 
 # Basic usage examples
