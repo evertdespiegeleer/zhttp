@@ -9,7 +9,8 @@
   },
   "version": "0.0.6",
   "type": "module",
-  "main": "./dist/main.js",
+  "main": "./dist/cjs/main.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/main.d.ts",
   "files": [
     "./dist",
@@ -20,7 +21,9 @@
     "npm": "^10.2.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
