@@ -1818,11 +1818,6 @@ micromatch@^4.0.4:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-middleware-async@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/middleware-async/-/middleware-async-1.4.0.tgz"
-  integrity sha512-Mw4awh2zuWGTlF2gcS439kuYyJqf2AoDkR/HCLwiy+PPKJhQyPL5TWzcD2kmos0Nb8VnEFCSH9Hnr5qJgyBNew==
-
 mime-db@1.52.0:
   version "1.52.0"
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
