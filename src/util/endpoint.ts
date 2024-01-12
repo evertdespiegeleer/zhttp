@@ -223,7 +223,7 @@ export class Endpoint<
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyEndpoint = Endpoint<any, any>
+export type AnyEndpoint = Endpoint<string, InputValidationSchema<string>, ResponseValidationSchema>
 
 /** Define a new endpoint */
 export const endpoint = <Path extends string>(
