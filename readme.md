@@ -78,26 +78,27 @@ server.start()
 ```ts
 // ./examples/concept-middleware.ts
 
-import { type Request, type Response, type NextFunction } from 'express';
+import { type Request, type Response, type NextFunction } from 'express'
 import { middleware, MiddlewareTypes } from '@zhttp/core'
 
 export const lastVisitMiddleware = middleware({
-    name: 'lastVisitMiddleware',
-    type: MiddlewareTypes.BEFORE,
-    handler(req: Request, res: Response, next: NextFunction) {
-        const now = new Date()
-        const lastVisitCookieValue = req.cookies['beenHereBefore']
-        const lastVisitTime = lastVisitCookieValue ? new Date(lastVisitCookieValue) : undefined
-        res.cookie('beenHereBefore', now.toISOString)
-        if (lastVisitTime == null) {
-            console.log('Seems like we\'ve got a new user 👀')
-            return next();
-        }
-        const daysSinceLastVisit = (now.getTime() - lastVisitTime.getTime()) / (1000 * 60 * 60 * 24)
-        console.log(`It's been ${daysSinceLastVisit} days since this user last visited.`)
-        return next();
+  name: 'lastVisitMiddleware',
+  type: MiddlewareTypes.BEFORE,
+  handler (req: Request, res: Response, next: NextFunction) {
+    const now = new Date()
+    const lastVisitCookieValue = req.cookies.beenHereBefore
+    const lastVisitTime = lastVisitCookieValue != null ? new Date(String(lastVisitCookieValue)) : undefined
+    res.cookie('beenHereBefore', now.toISOString())
+    if (lastVisitTime == null) {
+      console.log('Seems like we\'ve got a new user 👀')
+      next(); return
     }
+    const daysSinceLastVisit = (now.getTime() - lastVisitTime.getTime()) / (1000 * 60 * 60 * 24)
+    console.log(`It's been ${daysSinceLastVisit} days since this user last visited.`)
+    next()
+  }
 })
+
 ```
 
 ## Endpoints
@@ -111,36 +112,37 @@ import { z } from 'zod'
 import { endpoint, get } from '@zhttp/core'
 
 const zGreetingOutput = z.object({
-    message: z.string()
+  message: z.string()
 })
 
 const zGreetingInput = z.object({
-    query: z.object({
-        name: z.string().optional()
-    })
+  query: z.object({
+    name: z.string().optional()
+  })
 })
 
 // ⬇ For common http methods (get, post, put, del), utility functions are available:
 get('/hello', 'getGreeting')
-    .description('Say hello to everyone')
-    .input(zGreetingInput)
-    .response(zGreetingOutput)
-    .handler(async ({ query }) => {
-        return {
-            message: `Hello ${query.name ?? 'everyone'}!`
-        }
-    })
+  .description('Say hello to everyone')
+  .input(zGreetingInput)
+  .response(zGreetingOutput)
+  .handler(async ({ query }) => {
+    return {
+      message: `Hello ${query.name ?? 'everyone'}!`
+    }
+  })
 
 // `endpoint` is a generic function which supports every http method.
 endpoint('get', '/goodbye', 'getGoodbye')
-    .description('Say goodbye to everyone')
-    .input(zGreetingInput)
-    .response(zGreetingOutput)
-    .handler(async ({ query }) => {
-        return {
-            message: `Goodbye ${query.name ?? 'everyone'}!`
-        }
-    })
+  .description('Say goodbye to everyone')
+  .input(zGreetingInput)
+  .response(zGreetingOutput)
+  .handler(async ({ query }) => {
+    return {
+      message: `Goodbye ${query.name ?? 'everyone'}!`
+    }
+  })
+
 ```
 
 ## Controllers
@@ -155,28 +157,29 @@ Controllers do **not** serve as routers. Every endpoint path should be a _comple
 // ./examples/concept-controller.ts
 
 import { z } from 'zod'
-import { controller, get } from "@zhttp/core";
+import { controller, get } from '@zhttp/core'
 
 export const greetingController = controller('greeting')
-.description('A controller that greets the world.')
+  .description('A controller that greets the world.')
 
 greetingController.endpoint(
-    get('/hello', 'getGreeting')
+  get('/hello', 'getGreeting')
     .description('Say hello to everyone')
     .input(z.object({
-        query: z.object({
-            name: z.string().optional()
-        })
+      query: z.object({
+        name: z.string().optional()
+      })
     }))
     .response(z.object({
-        message: z.string()
+      message: z.string()
     }))
     .handler(async ({ query }) => {
-        return {
-            message: `Hello ${query.name ?? 'everyone'}!`
-        }
+      return {
+        message: `Hello ${query.name ?? 'everyone'}!`
+      }
     })
 )
+
 ```
 
 ## Server

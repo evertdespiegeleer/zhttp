@@ -1,10 +1,13 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "."
+        "baseUrl": ".",
     },
     "include": [
         "./src/**/*.ts"
+    ],
+    "@zhttp/*": [
+        ".."
     ],
     "ts-node": {
         "experimentalSpecifierResolution": "node",

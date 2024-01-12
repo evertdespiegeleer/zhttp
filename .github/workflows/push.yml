@@ -74,10 +74,7 @@ jobs:
 
     - name: Install Dependencies
       run: npm ci
-
-    - name: esm issue fix
-      run: ls -la ./node_modules/@zhttp
-
+      
     - name: Test
       id: test
       run: npm run test
