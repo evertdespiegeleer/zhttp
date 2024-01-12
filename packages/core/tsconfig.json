@@ -4,8 +4,10 @@
         "baseUrl": ".",
         "paths": {
             // Not really sure why we need this, but remove it and we've got an esm issue with the tests running in Github CI
-            "@zhttp/*": [
-                "..",
+            "@zhttp/errors*": [
+                "../errors",
+                "../errors/src",
+                "../errors/src/main.ts",
             ],
         }
     },
