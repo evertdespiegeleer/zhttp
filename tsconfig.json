@@ -13,8 +13,6 @@
 
         "moduleResolution": "NodeNext",
         "module": "NodeNext",
-        "rootDir": "./src",
-        "outDir": "./dist",
         "sourceMap": true,
         "declaration": true,
 
@@ -27,8 +25,8 @@
 
         "baseUrl": ".",
         "paths": {
-          "*": ["node_modules/*"]
+          "*": ["node_modules/*"],
         }
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*"]
 }
