@@ -1,4 +1,4 @@
-export { Server } from './app.js';
+export { Server } from './app.js'
 export {
   endpoint,
   type Method,
@@ -7,15 +7,15 @@ export {
   post,
   del,
   type InputValidationSchema,
-  type ResponseValidationSchema,
-} from './util/endpoint.js';
+  type ResponseValidationSchema
+} from './util/endpoint.js'
 
 export { openapiController } from './controllers/openapi.js'
 
-export { controller } from './util/controller.js';
+export { controller } from './util/controller.js'
 
-export * from './util/middleware.js';
+export * from './util/middleware.js'
 export * as errors from './util/errors.js'
 
-export { apiResponse, zApiOutput } from './util/apiResponse.js';
-export { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+export { apiResponse, zApiOutput } from './util/apiResponse.js'
+export { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
