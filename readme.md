@@ -1,5 +1,11 @@
 ![zhttp, a minimal, typesafe HTTP library with Zod validation](./.readme-assets/header.png)
 
+## Installation
+
+```sh
+npm install @zhttp/core
+```
+
 ## Usage example
 
 ```ts

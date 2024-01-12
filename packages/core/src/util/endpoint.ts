@@ -2,8 +2,10 @@ import { type ZodRawShape, type ZodString, type ZodObject, type ZodSchema } from
 import type z from 'zod'
 import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
-import { type EndpointOasInfo } from '../oas.js'
 import { NotImplementedError, ValidationError } from '@zhttp/errors'
+import { type OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
+
+export type EndpointOasInfo = Parameters<OpenAPIRegistry['registerPath']>['0']
 
 const methods = [
   'get',
