@@ -26,14 +26,8 @@
     "sync:readme": "npx embedme ./readme.md"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.11",
-    "@types/node": "^20.10.6",
-    "@types/sinon": "^17.0.2",
-    "@types/supertest": "^6.0.2",
-    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.18.1",
-    "chai": "^5.0.0",
     "devmoji": "^2.3.0",
     "eslint": "^8.0.1",
     "eslint-config-standard-with-typescript": "^43.0.0",
@@ -41,8 +35,6 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^8.0.0",
-    "sinon": "^17.0.1",
-    "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^4.4.4"
   }
