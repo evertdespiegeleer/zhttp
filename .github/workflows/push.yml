@@ -76,13 +76,13 @@ jobs:
       run: npm ci
 
     - name: Test
+      id: test
       run: npm run test
     
     - name: Test Report
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: ./packages/*/test-report.xml
-      if: always()
   
   pr-prerelease:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -123,7 +123,7 @@ jobs:
       - name: Version the packages
         id: version
         run: |
-          ./scripts/version.sh prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//'))
+          ./scripts/version.sh prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
           export VERSION=$(cat package.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       
