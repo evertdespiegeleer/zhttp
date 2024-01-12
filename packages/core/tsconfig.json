@@ -2,12 +2,15 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
+        "paths": {
+            // Not really sure why we need this, but remove it and we've got an esm issue with the tests running in Github CI
+            "@zhttp/*": [
+                "..",
+            ],
+        }
     },
     "include": [
         "./src/**/*.ts"
-    ],
-    "@zhttp/*": [
-        ".."
     ],
     "ts-node": {
         "experimentalSpecifierResolution": "node",
