@@ -20,10 +20,11 @@
     "yarn": "^1.22.0"
   },
   "scripts": {
+    "preinstall": "npx only-allow yarn",
     "build": "tsc -p tsconfig.build.json",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts",
     "prepare": "husky install",
-    "lint": "eslint ./src/**/*.ts",
+    "lint": "yarn eslint 'src/**/*.ts'",
     "lint:fix": "yarn run lint --fix",
     "sync:readme": "npx embedme ./readme.md"
   },
@@ -32,7 +33,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "middleware-async": "^1.4.0",
     "prom-client": "^15.1.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
