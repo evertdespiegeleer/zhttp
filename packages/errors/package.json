@@ -7,10 +7,14 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.6",
-  "type": "module",
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "version": "0.0.7-feat-support-commonjs.1",
+  "main": "./dist/cjs/main.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/main.d.ts",
+  "exports": {
+    "import": "./dist/esm/main.js",
+    "require": "./dist/cjs/main.js"
+  },
   "files": [
     "./dist",
     "./readme.md"
@@ -20,7 +24,9 @@
     "npm": "^10.2.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
     "test": "echo \"No tests here :)\""
   },
   "dependencies": {

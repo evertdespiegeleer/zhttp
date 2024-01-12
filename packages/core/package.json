@@ -7,10 +7,14 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.6",
-  "type": "module",
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "version": "0.0.7-feat-support-commonjs.1",
+  "main": "./dist/cjs/main.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/main.d.ts",
+  "exports": {
+    "import": "./dist/esm/main.js",
+    "require": "./dist/cjs/main.js"
+  },
   "files": [
     "./dist",
     "./readme.md"
@@ -20,12 +24,14 @@
     "npm": "^10.2.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "@zhttp/errors": "0.0.6",
+    "@zhttp/errors": "0.0.7-feat-support-commonjs.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -51,7 +57,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@zhttp/errors": "0.0.6",
+    "@zhttp/errors": "0.0.7-feat-support-commonjs.1",
     "zod": "^3.22.4"
   }
 }
