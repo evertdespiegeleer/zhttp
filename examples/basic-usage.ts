@@ -6,7 +6,7 @@ import {
   extendZodWithOpenApi,
   zApiOutput,
   apiResponse
-} from '../src/main.js'
+} from '@zhttp/core'
 
 extendZodWithOpenApi(z)
 // ⬆ What this allows you to do is to optionally add OAS info
