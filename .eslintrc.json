@@ -21,7 +21,7 @@
         {
           "files": ["*.test.ts"],
           "rules": {
-            // Disable on test files so we can usu chai `...to.be.undefined` style syntax
+            // Disable on test files so we can use chai `...to.be.undefined` style syntax
             "@typescript-eslint/no-unused-expressions": "off"
           }
         }
