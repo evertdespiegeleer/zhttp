@@ -5,7 +5,8 @@ import {
   get,
   extendZodWithOpenApi,
   zApiOutput,
-  apiResponse
+  apiResponse,
+  openapiController
 } from '@zhttp/core'
 
 extendZodWithOpenApi(z)
@@ -41,7 +42,8 @@ helloController.endpoint(
 
 const server = new Server({
   controllers: [
-    helloController
+    helloController,
+    openapiController
   ]
 }, {
   port: 3000,
