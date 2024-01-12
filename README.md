@@ -1,4 +1,4 @@
-![zhttp, a minimal, strongly typed HTTP library with Zod validation](./.readme-files/header.png)
+![zhttp, a minimal, typesafe HTTP library with Zod validation](./.readme-assets/header.png)
 
 ## Usage example
 
