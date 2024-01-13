@@ -7,13 +7,18 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.7",
-  "main": "./dist/cjs/main.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/main.d.ts",
+  "version": "0.0.8-fix-esm-cjs-issues.4",
+  "type": "module",
+  "types": "./dist/types/main.d.ts",
   "exports": {
-    "import": "./dist/esm/main.js",
-    "require": "./dist/cjs/main.js"
+    "import": {
+      "types": "./dist/types/main.d.ts",
+      "default": "./dist/esm/main.js"
+    },
+    "require": {
+      "types": "./dist/types/main.d.ts",
+      "default": "./dist/cjs/main.cjs"
+    }
   },
   "files": [
     "./dist",
@@ -26,12 +31,12 @@
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.build.esm.json",
-    "build:cjs": "tsc -p tsconfig.build.cjs.json",
+    "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/{**/,}*.test.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "@zhttp/errors": "0.0.7",
+    "@zhttp/errors": "0.0.8-fix-esm-cjs-issues.4",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -57,7 +62,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@zhttp/errors": "0.0.7",
+    "@zhttp/errors": "0.0.8-fix-esm-cjs-issues.4",
     "zod": "^3.22.4"
   }
 }
