@@ -14,3 +14,9 @@ export const defaultLogger: ILogger = (context: string) => {
     info: (message: string) => { console.info(`${prefix}${message}`) }
   }
 }
+
+export const loggerInstance: {
+  logger: ILogger
+} = {
+  logger: defaultLogger
+}

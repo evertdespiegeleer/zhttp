@@ -6,11 +6,11 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { type Controller, bindControllerToApp } from './util/controller.js'
 import { type Middleware, MiddlewareTypes } from './util/middleware.js'
-import { makeErrorHandlerMiddleware } from './middleware/errorHandler.js'
+import { errorHandlerMiddleware } from './middleware/errorHandler.js'
 import { metricMiddleware } from './middleware/metrics.js'
 import { type OASInfo, Oas } from './oas.js'
 import { BadRequestError } from '@zhttp/errors'
-import { type ILogger, defaultLogger } from './util/logger.js'
+import { type ILogger, defaultLogger, loggerInstance } from './util/logger.js'
 
 interface RoutingOptions {
   controllers?: Controller[]
@@ -31,16 +31,15 @@ export let oasInstance: Oas
 export class Server {
   private readonly app: Application
   private httpServer: NodeHttpServer
-  private readonly logger: ILogger
-  private readonly loggerInstance
+  private readonly appLogger
 
   constructor (
     private readonly options: RoutingOptions = {},
     private readonly httpOptions: IHTTPOptions = {},
-    private readonly application?: Application
+    private readonly externalApplication?: Application
   ) {
-    this.logger = httpOptions.logger ?? defaultLogger
-    this.loggerInstance = this.logger('zhttp')
+    loggerInstance.logger = httpOptions.logger ?? defaultLogger
+    this.appLogger = loggerInstance.logger('zhttp')
 
     oasInstance = new Oas(httpOptions.oasInfo)
 
@@ -50,7 +49,7 @@ export class Server {
       ...this.httpOptions
     }
 
-    this.app = application ?? express()
+    this.app = this.externalApplication ?? express()
     this.httpServer = createServer(this.app)
 
     this.app.set('trust proxy', this.httpOptions.trustProxy)
@@ -68,7 +67,7 @@ export class Server {
           ) {
             callback(null, true)
           } else {
-            this.loggerInstance.warn(`Origin ${origin} not allowed`)
+            this.appLogger.warn(`Origin ${origin} not allowed`)
             callback(new BadRequestError('Not allowed by CORS'))
           }
         }
@@ -80,7 +79,7 @@ export class Server {
     this.options.middlewares = [
       ...(this.options.middlewares ?? []),
       metricMiddleware,
-      makeErrorHandlerMiddleware(this.logger)
+      errorHandlerMiddleware
     ]
 
     // run all global before middlewares
@@ -119,7 +118,7 @@ export class Server {
 
   async start () {
     this.httpServer = this.httpServer.listen(this.httpOptions.port, () => {
-      this.loggerInstance.info(
+      this.appLogger.info(
         `HTTP server listening on port ${this.httpOptions.port}`
       )
     })
@@ -128,7 +127,7 @@ export class Server {
   async stop () {
     if (this.httpServer != null) {
       this.httpServer.close()
-      this.loggerInstance.info('HTTP server stopped')
+      this.appLogger.info('HTTP server stopped')
     }
   }
 }

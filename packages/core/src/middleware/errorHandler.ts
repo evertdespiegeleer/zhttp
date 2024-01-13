@@ -2,9 +2,9 @@ import { type Request, type Response, type NextFunction } from 'express'
 import { MiddlewareTypes, middleware } from '../util/middleware.js'
 import { apiResponse } from '../util/apiResponse.js'
 import { ConflictError, ZHTTPError, InternalServerError } from '@zhttp/errors'
-import { type ILogger } from '../util/logger.js'
+import { loggerInstance } from '../util/logger.js'
 
-export const makeErrorHandlerMiddleware = (logger: ILogger) => middleware({
+export const errorHandlerMiddleware = middleware({
   name: 'ErrorHandler',
   type: MiddlewareTypes.AFTER,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,7 +18,7 @@ export const makeErrorHandlerMiddleware = (logger: ILogger) => middleware({
     let status = 500
     let parsedError = new InternalServerError()
 
-    const log = logger('errorHandler')
+    const log = loggerInstance.logger('errorHandler')
 
     if (originalError.name === 'UniqueViolationError') {
       status = 409

@@ -213,6 +213,106 @@ The package exports a special controller `openapiController`. When used, this co
 
 # Errors
 
+`zhttp` has a [built in error handler](./packages/core/src/middleware/errorHandler.ts*), which will catch any sort of error thrown in an endpoint or middleware.
+
+## `@zhttp/errors`
+
+Any type of unknown error will be logged and will result in a `InternalServerError` response (http status code 500).
+
+If you want to throw a specific type of error which will be reflectced in the http response, you can use the `@zhttp/errors` library.
+
+```ts
+// ./examples/concepts-errors.ts
+
+import { z } from 'zod'
+import { controller, get } from '@zhttp/core'
+import { NotFoundError } from '@zhttp/errors'
+
+// Let's presume we're talking to some sort of database
+const db: any = undefined
+
+export const vegetablesController = controller('vegetables')
+
+vegetablesController.endpoint(
+  get('/vegetables/:vegetableId', 'getVegetableDetails')
+    .input(z.object({
+      params: z.object({
+        vegetableId: z.string().uuid()
+      })
+    }))
+    .response(z.object({
+      message: z.string()
+    }))
+    .handler(async ({ params: { vegetableId } }) => {
+      const vegetableDetails = await db.getVegetableById(vegetableId)
+      if (vegetableDetails == null) {
+        // ✨✨✨✨✨✨✨✨✨
+        throw new NotFoundError(`Vegetable with id ${vegetableId} does not exist`)
+        // ⬆ This will result in a 404 response
+        // ✨✨✨✨✨✨✨✨✨
+      }
+      return vegetableDetails
+    })
+)
+
+```
+
+## Validation errors
+
+If an error is detected as part of the request input validation, the server will send a `ValidationError` response, including an error message explaining what's wrong.
+
+If an error is detected as part of the request output validation, an `InternalServerError` is returned, and error message is logged.
+
+Try it for yourself!
+
+```ts
+// ./examples/validation-errors.ts
+
+import { z } from 'zod'
+import { controller, get } from '@zhttp/core'
+
+export const validationExampleController = controller('validationExample')
+
+validationExampleController.endpoint(
+  get('/hello', 'getGreeting')
+    .input(z.object({
+      query: z.object({
+        // If a name shorter than 5 characcters is provided, then the server will responde with a ValidationError.
+        name: z.string().min(5)
+      })
+    }))
+    .response(z.object({
+      message: z.string()
+    }))
+    .handler(async ({ query }) => {
+      return {
+        message: `Hello ${query.name ?? 'everyone'}!`
+      }
+    })
+)
+
+validationExampleController.endpoint(
+  get('/goodbye', 'getGoodbye')
+    .input(z.object({
+      query: z.object({
+        name: z.string().optional()
+      })
+    }))
+    .response(z.object({
+      message: z.string()
+    }))
+    .handler(async ({ query }) => {
+      return {
+        thisKeyShouldntBeHere: 'noBueno'
+      } as any
+      // ⬆ As zhttp is typesafe, you actually have to manually $x&! up the typing
+      // to provoke an output validation error :)
+      // This will result in an InternalServerError.
+    })
+)
+
+```
+
 # Order of execution
 - Server 'BEFORE' middlewares
 - Controller 'BEFORE' middlewares

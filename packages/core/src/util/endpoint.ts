@@ -2,8 +2,9 @@ import { type ZodRawShape, type ZodString, type ZodObject, type ZodSchema } from
 import type z from 'zod'
 import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
-import { NotImplementedError, ValidationError } from '@zhttp/errors'
+import { InternalServerError, NotImplementedError, ValidationError } from '@zhttp/errors'
 import { type OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
+import { loggerInstance } from './logger.js'
 
 export type EndpointOasInfo = Parameters<OpenAPIRegistry['registerPath']>['0']
 
@@ -282,7 +283,8 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
           endpoint.getResponseValidationSchema()?.parse(responseObj)
         } catch (error) {
           const e = error as z.ZodError
-          next(new ValidationError(e.message, e.issues))
+          loggerInstance.logger('endpointOutputValidation').error(e)
+          next(new InternalServerError())
           return
         }
 
