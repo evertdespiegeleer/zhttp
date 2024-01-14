@@ -1,5 +1,9 @@
 ![zhttp, a minimal, typesafe HTTP library with Zod validation](./.readme-assets/header.png)
 
+`zhttp`  is a minimal, typesafe, [OpenAPI](https://www.openapis.org/) compatible HTTP library. It's build around [express](https://github.com/expressjs/express) and [Zod](https://github.com/colinhacks/zod).
+
+`zhttp` solves some of the pains of building an API with express (handler typing, error handling, input/output validation...) while attempting to stay as flexible as possible.
+
 # Installation
 
 ```sh
@@ -75,6 +79,14 @@ server.start()
 
 ## Middleware
 
+A middleware is a function that operates between an incoming request and the corresponding outgoing response. It serves as a processing layer before or after an endpoint handler, carrying out tasks like logging, authentication, and other sorts of data manipulation.
+
+Middlewares in `zhttp` are essentially just express middlewares, with two extra properties: their type ([indicating when to run them](#order-of-execution)), and an optional name.
+Middlewares can be bound on multiple levels:
+- The server
+- A controller
+- An endpoint
+
 ### Basic middleware example
 
 ```ts
@@ -104,6 +116,8 @@ export const lastVisitMiddleware = middleware({
 ```
 
 ## Endpoints
+
+<!-- TODO: add docs for endpoints/endpoint handler -->
 
 ### Basic endpoint example
 
@@ -195,7 +209,7 @@ import { Server } from '@zhttp/core'
 import { greetingController } from './concept-controller.js'
 import { lastVisitMiddleware } from './concept-middleware.js'
 
-const server = new Server({
+export const server = new Server({
   controllers: [greetingController],
   middlewares: [lastVisitMiddleware]
 }, {
@@ -209,7 +223,24 @@ server.start()
 
 # OpenAPI
 
+## `openapiController`
+
 The package exports a special controller `openapiController`. When used, this controller exposes routes `/openapi.json` (the OpenAPI json spec) and `/api.html` (a [RapiDoc](https://rapidocweb.com/) api interface).
+
+## Programmatic access
+
+The openapi definition can be directly from the server object.
+
+```ts
+// ./examples/direct-openapi.ts
+
+import { server } from './concept-server.js'
+
+console.log(
+  server.oasInstance.getJsonSpec()
+)
+
+```
 
 # Errors
 
