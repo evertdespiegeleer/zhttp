@@ -21,7 +21,7 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "prepare": "npx husky install && cp ./readme.md ./packages/core",
-    "lint": "eslint 'packages/*/src/**/*.ts'",
+    "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
     "sync:readme": "npx embedme ./readme.md"
   },

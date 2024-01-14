@@ -9,11 +9,11 @@ export const vegetablesController = controller('vegetables')
 
 vegetablesController.endpoint(
   get('/vegetables/:vegetableId', 'getVegetableDetails')
-    .input(z.object({
+    .input({
       params: z.object({
         vegetableId: z.string().uuid()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))

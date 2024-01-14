@@ -5,6 +5,7 @@
         "rootDir": "..",
         "paths": {
             "@zhttp/core*": ["../packages/core/src", "../packages/core/src/main.ts", "../packages/core/src/*"],
+            "@zhttp/errors*": ["../packages/errors/src", "../packages/errors/src/main.ts", "../packages/errors/src/*"],
         }
     },
     "include": [

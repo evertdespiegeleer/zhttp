@@ -33,13 +33,11 @@ describe('controller', () => {
       .endpoints([
         get('/hello')
           .description('Say hello to everyone')
-          .input(
-            z.object({
-              query: z.object({
-                name: z.string().optional()
-              })
+          .input({
+            query: z.object({
+              name: z.string().optional()
             })
-          )
+          })
           .response(zApiOutput(z.string()))
           .handler(async ({ query }) => {
             return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
@@ -53,13 +51,11 @@ describe('controller', () => {
       .endpoints([
         get('/hello')
           .description('Say hello to everyone')
-          .input(
-            z.object({
-              query: z.object({
-                name: z.string().min(5).optional()
-              })
+          .input({
+            query: z.object({
+              name: z.string().min(5).optional()
             })
-          )
+          })
           .response(zApiOutput(z.string()))
           .handler(async ({ query }) => {
             return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
@@ -67,13 +63,11 @@ describe('controller', () => {
 
         get('/goodbye')
           .description('Say goodbye to everyone')
-          .input(
-            z.object({
-              query: z.object({
-                name: z.string().min(5).optional()
-              })
+          .input({
+            query: z.object({
+              name: z.string().min(5).optional()
             })
-          )
+          })
           .response(zApiOutput(z.string()))
           .handler(async ({ query }) => {
             return apiResponse(`Goodbye ${query.name ?? 'everyone'}!`)

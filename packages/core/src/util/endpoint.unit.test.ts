@@ -49,13 +49,11 @@ describe('endpoint', () => {
   it('Can be defined with correct typing', async () => {
     endpoint('get', '/hello', 'hello')
       .description('Say hello to everyone')
-      .input(
-        z.object({
-          query: z.object({
-            name: z.string().optional()
-          })
+      .input({
+        query: z.object({
+          name: z.string().optional()
         })
-      )
+      })
       .response(zApiOutput(z.string()))
       .handler(async ({ query }) => {
         return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
@@ -65,13 +63,11 @@ describe('endpoint', () => {
   it('Can be run as an Express handler', async () => {
     const helloEndpoint = endpoint('get', '/hello', 'hello')
       .description('Say hello to everyone')
-      .input(
-        z.object({
-          query: z.object({
-            name: z.string().optional()
-          })
+      .input({
+        query: z.object({
+          name: z.string().optional()
         })
-      )
+      })
       .response(zApiOutput(z.string()))
       .handler(async ({ query }) => {
         return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
@@ -97,13 +93,11 @@ describe('endpoint', () => {
   it('Can throw a validation error', async () => {
     const helloEndpoint = endpoint('get', '/hello', 'hello')
       .description('Say hello to everyone')
-      .input(
-        z.object({
-          query: z.object({
-            name: z.string().min(10)
-          })
+      .input({
+        query: z.object({
+          name: z.string().min(10)
         })
-      )
+      })
       .response(zApiOutput(z.string()))
       .handler(async ({ query }) => {
         return apiResponse(`Hello ${query.name ?? 'everyone'}!`)
@@ -129,13 +123,11 @@ describe('endpoint', () => {
   it('Can throw a not implemented error', async () => {
     const helloEndpoint = endpoint('get', '/hello', 'hello')
       .description('Say hello to everyone')
-      .input(
-        z.object({
-          query: z.object({
-            name: z.string()
-          })
+      .input({
+        query: z.object({
+          name: z.string()
         })
-      )
+      })
       .response(zApiOutput(z.string()))
 
     const expressHandler = endpointToExpressHandler(helloEndpoint)

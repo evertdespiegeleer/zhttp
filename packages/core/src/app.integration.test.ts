@@ -34,13 +34,11 @@ describe('app', () => {
     greetingController.endpoint(
       get('/hello')
         .description('Say hello to everyone')
-        .input(
-          z.object({
-            query: z.object({
-              name: z.string().optional()
-            })
+        .input({
+          query: z.object({
+            name: z.string().optional()
           })
-        )
+        })
         .response(zApiOutput(z.string()))
         .handler(async ({ query }) => {
           return apiResponse(`Hello ${query.name ?? 'everyone'}!`)

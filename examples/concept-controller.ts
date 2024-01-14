@@ -7,11 +7,11 @@ export const greetingController = controller('greeting')
 greetingController.endpoint(
   get('/hello', 'getGreeting')
     .description('Say hello to everyone')
-    .input(z.object({
+    .input({
       query: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))

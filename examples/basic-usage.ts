@@ -26,11 +26,11 @@ const helloController = controller('Hello')
 
 helloController.endpoint(
   get('/hello')
-    .input(z.object({
+    .input({
       params: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(zHelloResponse)
     .handler(async (input) => {
       return apiResponse({

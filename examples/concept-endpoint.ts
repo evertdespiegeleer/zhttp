@@ -5,11 +5,11 @@ const zGreetingOutput = z.object({
   message: z.string()
 })
 
-const zGreetingInput = z.object({
+const zGreetingInput = {
   query: z.object({
     name: z.string().optional()
   })
-})
+}
 
 // ⬇ For common http methods (get, post, put, del), utility functions are available:
 get('/hello', 'getGreeting')

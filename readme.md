@@ -39,11 +39,11 @@ const helloController = controller('Hello')
 
 helloController.endpoint(
   get('/hello')
-    .input(z.object({
+    .input({
       params: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(zHelloResponse)
     .handler(async (input) => {
       return apiResponse({
@@ -117,11 +117,11 @@ const zGreetingOutput = z.object({
   message: z.string()
 })
 
-const zGreetingInput = z.object({
+const zGreetingInput = {
   query: z.object({
     name: z.string().optional()
   })
-})
+}
 
 // ⬇ For common http methods (get, post, put, del), utility functions are available:
 get('/hello', 'getGreeting')
@@ -167,11 +167,11 @@ export const greetingController = controller('greeting')
 greetingController.endpoint(
   get('/hello', 'getGreeting')
     .description('Say hello to everyone')
-    .input(z.object({
+    .input({
       query: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))
@@ -235,11 +235,11 @@ export const vegetablesController = controller('vegetables')
 
 vegetablesController.endpoint(
   get('/vegetables/:vegetableId', 'getVegetableDetails')
-    .input(z.object({
+    .input({
       params: z.object({
         vegetableId: z.string().uuid()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))
@@ -275,12 +275,12 @@ export const validationExampleController = controller('validationExample')
 
 validationExampleController.endpoint(
   get('/hello', 'getGreeting')
-    .input(z.object({
+    .input({
       query: z.object({
         // If a name shorter than 5 characcters is provided, then the server will responde with a ValidationError.
         name: z.string().min(5)
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))
@@ -293,11 +293,11 @@ validationExampleController.endpoint(
 
 validationExampleController.endpoint(
   get('/goodbye', 'getGoodbye')
-    .input(z.object({
+    .input({
       query: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))
