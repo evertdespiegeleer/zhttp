@@ -1,5 +1,5 @@
 import { type ZodRawShape, type ZodString, type ZodObject, type ZodSchema } from 'zod'
-import type z from 'zod'
+import z from 'zod'
 import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
 import { InternalServerError, NotImplementedError, ValidationError } from '@zhttp/errors'
@@ -89,26 +89,27 @@ export class Endpoint<
     return this
   }
 
-  /** Specify a zod input schema for the endpoint.
-   * Must be a zod object on which the following properties are allowed: params, query, body.
+  /** Specify a an input schema for the endpoint.
+   * Must be an object on which the following properties are allowed: `params`, `query`, `body`.
+   * query and params must be `ZodObject`s. `body` can be any Zod schema
    *
    * @example
    * ```ts
    * ...
-   * .input(z.object({
+   * .input({
    *   query: z.object({
    *     name: z.string(),
    *     age: z.number().optional()
    *   })
-   * }))
+   * })
    * ```
    * */
-  input<NewInputsSchema extends InputValidationSchema<Path>>(
-    inputValidationSchema: NewInputsSchema
+  input<NewInputsSchemaShape extends InputValidationSchema<Path>['shape']>(
+    inputValidationSchemaShape: NewInputsSchemaShape
   ) {
-    return new Endpoint<Path, NewInputsSchema, OutputSchema>({
+    return new Endpoint<Path, ZodObject<NewInputsSchemaShape>, OutputSchema>({
       ...this.options,
-      inputValidationSchema
+      inputValidationSchema: z.object(inputValidationSchemaShape)
     })
   }
 

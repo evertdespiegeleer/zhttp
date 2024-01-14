@@ -5,12 +5,12 @@ export const validationExampleController = controller('validationExample')
 
 validationExampleController.endpoint(
   get('/hello', 'getGreeting')
-    .input(z.object({
+    .input({
       query: z.object({
         // If a name shorter than 5 characcters is provided, then the server will responde with a ValidationError.
         name: z.string().min(5)
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))
@@ -23,11 +23,11 @@ validationExampleController.endpoint(
 
 validationExampleController.endpoint(
   get('/goodbye', 'getGoodbye')
-    .input(z.object({
+    .input({
       query: z.object({
         name: z.string().optional()
       })
-    }))
+    })
     .response(z.object({
       message: z.string()
     }))

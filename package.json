@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.9",
+  "version": "0.0.10-refactor-remove-zodobject-input.0",
   "type": "module",
   "engines": {
     "node": "^20.10.x",
@@ -21,7 +21,7 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "prepare": "npx husky install && cp ./readme.md ./packages/core",
-    "lint": "eslint 'packages/*/src/**/*.ts'",
+    "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
     "sync:readme": "npx embedme ./readme.md"
   },
