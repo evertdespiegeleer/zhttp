@@ -74,10 +74,12 @@ jobs:
 
     - name: Install Dependencies
       run: npm ci
-      
-    - name: Test
-      id: test
-      run: npm run test
+    
+    - uses: adambirds/docker-compose-action@v1.3.0
+      with:
+        compose-file: "./compose.yaml"
+        test-container: dev
+        test-command: "npm test"
     
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4

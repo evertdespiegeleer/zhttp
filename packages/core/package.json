@@ -32,7 +32,7 @@
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.build.esm.json",
     "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
-    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/{**/,}*.test.ts"
+    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
