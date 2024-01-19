@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.10",
+  "version": "0.0.11-fix-run-tests-dockerized.2",
   "type": "module",
   "engines": {
     "node": "^20.10.x",
@@ -20,7 +20,7 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "prepare": "npx husky install && cp ./readme.md ./packages/core",
+    "prepare": "npx husky install && cp ./readme.md ./packages/core || true",
     "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
     "sync:readme": "npx embedme ./readme.md"

@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "0.0.10",
+  "version": "0.0.11-fix-run-tests-dockerized.2",
   "type": "module",
   "types": "./dist/types/main.d.ts",
   "exports": {
@@ -32,11 +32,11 @@
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.build.esm.json",
     "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
-    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/{**/,}*.test.ts"
+    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "@zhttp/errors": "0.0.10",
+    "@zhttp/errors": "0.0.11-fix-run-tests-dockerized.2",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -62,7 +62,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@zhttp/errors": "0.0.10",
+    "@zhttp/errors": "0.0.11-fix-run-tests-dockerized.2",
     "zod": "^3.22.4"
   }
 }
