@@ -2,7 +2,7 @@
 
 `zhttp`  is a minimal, typesafe, [OpenAPI](https://www.openapis.org/) compatible HTTP library. It's build around [express](https://github.com/expressjs/express) and [Zod](https://github.com/colinhacks/zod).
 
-`zhttp` solves some of the pains of building an API with express (handler typing, error handling, input/output validation...) while attempting to stay as flexible as possible.
+It solves some of the major pains of building an API with express (handler typing, error handling, input/output validation, openapi...) while attempting to stay as flexible (read: _as close to plain express_) as possible.
 
 # Installation
 
@@ -377,7 +377,9 @@ validationExampleController.endpoint(
 # CommonJS support
 
 [📰 CommonJS is hurting JavaScript](https://deno.com/blog/commonjs-is-hurting-javascript)
+
 The JavaScript ecosystem is (slowly but steadily) moving towards ESM and away from CommonJS. zhttp is build as an ESM module. It's strongly encouraged to use it like that.
 
 CommonJS is currently supported; the packages include both builds for ESM and CommonJS. You can use zhttp both ways.
-If major issues with supporting CommonJS would come up, or if we'd notice that – by essentially shipping the code twice in one package – the package would become too big, CommonJS support might be dropped in the future.
+
+If major issues with supporting CommonJS were to come up, or if we'd notice that the package would become too big (by essentially having to ship the build code twice), CommonJS support might be dropped in the future.
