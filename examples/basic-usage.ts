@@ -44,7 +44,8 @@ const server = new Server({
   controllers: [
     helloController,
     openapiController
-  ]
+  ],
+  middlewares: []
 }, {
   port: 3000,
   oasInfo: {

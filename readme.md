@@ -61,7 +61,8 @@ const server = new Server({
   controllers: [
     helloController,
     openapiController
-  ]
+  ],
+  middlewares: []
 }, {
   port: 3000,
   oasInfo: {
@@ -77,47 +78,31 @@ server.start()
 
 # Concepts
 
-## Middleware
-
-A middleware is a function that operates between an incoming request and the corresponding outgoing response. It serves as a processing layer before or after an endpoint handler, carrying out tasks like logging, authentication, and other sorts of data manipulation.
-
-Middlewares in `zhttp` are essentially just express middlewares, with two extra properties: their type ([indicating when to run them](#order-of-execution)), and an optional name.
-Middlewares can be bound on multiple levels:
-- The server
-- A controller
-- An endpoint
-
-### Basic middleware example
-
-```ts
-// ./examples/concept-middleware.ts
-
-import { type Request, type Response, type NextFunction } from 'express'
-import { middleware, MiddlewareTypes } from '@zhttp/core'
-
-export const lastVisitMiddleware = middleware({
-  name: 'lastVisitMiddleware',
-  type: MiddlewareTypes.BEFORE,
-  handler (req: Request, res: Response, next: NextFunction) {
-    const now = new Date()
-    const lastVisitCookieValue = req.cookies.beenHereBefore
-    const lastVisitTime = lastVisitCookieValue != null ? new Date(String(lastVisitCookieValue)) : undefined
-    res.cookie('beenHereBefore', now.toISOString())
-    if (lastVisitTime == null) {
-      console.log('Seems like we\'ve got a new user 👀')
-      next(); return
-    }
-    const daysSinceLastVisit = (now.getTime() - lastVisitTime.getTime()) / (1000 * 60 * 60 * 24)
-    console.log(`It's been ${daysSinceLastVisit} days since this user last visited.`)
-    next()
-  }
-})
-
-```
-
 ## Endpoints
 
-<!-- TODO: add docs for endpoints/endpoint handler -->
+Endpoints are the building blocks of your API. They define the HTTP methods, paths, inputs, outputs, and behavior for each API call.
+As can be seen in the example below, endpoints are defined using a function chaining approach.
+These functions are further refered to as 'modulators'.
+
+### Handlers and input/output typing
+
+Endpoint handlers are similar to plain express handlers, with some extra feastures for strict input and output typing. Rather than the typical 2 express handler parameters (`request` and `response`), there's three: `inputs`, `request`, `response`.
+`inputs` is a typed object containing everything defined in the input schema. `request` and `response` are simply the express `request` and `response` objects.
+
+Sending out a response is as simle as returning a value in the handler function. Handler responses, just like inputs, are strictly typed. When an output schema is specified and the handler function doesn't return a value that corresponds to said schema, typescript will comlain.
+
+By default, every endpoint will send its response with a `application/json` content type. This is typial for APIs, but there might be exceptions. You can override this content type using the `responseContentType` modulator.
+
+#### Using req/res directly
+
+You _can_ take input via the `request` object and use the `response` object to send a response in typical express manner, so migrating from express should be fairly trivial.
+However, beware that where you do this, you'll lose:
+- strict typing
+- output validation
+- AFTER-type middlewares
+
+### Routing
+An important distinction between plain express and zhttp is that zhttp – consciously – doesn't really support routing. The paths you see in your endpoint definitions are the paths that can be called; No hidden prefixes.
 
 ### Basic endpoint example
 
@@ -198,6 +183,44 @@ greetingController.endpoint(
 
 ```
 
+## Middleware
+
+A middleware is a function that operates between an incoming request and the corresponding outgoing response. It serves as a processing layer before or after an endpoint handler, carrying out tasks like logging, authentication, and other sorts of data manipulation.
+
+Middlewares in `zhttp` are essentially just express middlewares, with two extra properties: their type ([indicating when to run them](#order-of-execution)), and an optional name.
+Middlewares can be bound on multiple levels:
+- The server
+- A controller
+- An endpoint
+
+### Basic middleware example
+
+```ts
+// ./examples/concept-middleware.ts
+
+import { type Request, type Response, type NextFunction } from 'express'
+import { middleware, MiddlewareTypes } from '@zhttp/core'
+
+export const lastVisitMiddleware = middleware({
+  name: 'lastVisitMiddleware',
+  type: MiddlewareTypes.BEFORE,
+  handler (req: Request, res: Response, next: NextFunction) {
+    const now = new Date()
+    const lastVisitCookieValue = req.cookies.beenHereBefore
+    const lastVisitTime = lastVisitCookieValue != null ? new Date(String(lastVisitCookieValue)) : undefined
+    res.cookie('beenHereBefore', now.toISOString())
+    if (lastVisitTime == null) {
+      console.log('Seems like we\'ve got a new user 👀')
+      next(); return
+    }
+    const daysSinceLastVisit = (now.getTime() - lastVisitTime.getTime()) / (1000 * 60 * 60 * 24)
+    console.log(`It's been ${daysSinceLastVisit} days since this user last visited.`)
+    next()
+  }
+})
+
+```
+
 ## Server
 
 ### Basic server example
@@ -244,7 +267,7 @@ console.log(
 
 # Errors
 
-`zhttp` has a [built in error handler](./packages/core/src/middleware/errorHandler.ts*), which will catch any sort of error thrown in an endpoint or middleware.
+`zhttp` has a [built in error handler](./packages/core/src/middleware/errorHandler.ts), which will catch any sort of error thrown in an endpoint or middleware.
 
 ## `@zhttp/errors`
 
@@ -293,8 +316,6 @@ vegetablesController.endpoint(
 If an error is detected as part of the request input validation, the server will send a `ValidationError` response, including an error message explaining what's wrong.
 
 If an error is detected as part of the request output validation, an `InternalServerError` is returned, and error message is logged.
-
-Try it for yourself!
 
 ```ts
 // ./examples/validation-errors.ts
@@ -352,3 +373,11 @@ validationExampleController.endpoint(
 - Endpoint 'AFTER' middlewares
 - Controller 'AFTER' middlewares
 - Server 'AFTER' middlewares
+
+# CommonJS support
+
+[📰 CommonJS is hurting JavaScript](https://deno.com/blog/commonjs-is-hurting-javascript)
+The JavaScript ecosystem is (slowly but steadily) moving towards ESM and away from CommonJS. zhttp is build as an ESM module. It's strongly encouraged to use it like that.
+
+CommonJS is currently supported; the packages include both builds for ESM and CommonJS. You can use zhttp both ways.
+If major issues with supporting CommonJS would come up, or if we'd notice that – by essentially shipping the code twice in one package – the package would become too big, CommonJS support might be dropped in the future.

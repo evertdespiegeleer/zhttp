@@ -27,6 +27,8 @@ export const openapiController = controller('OpenAPI')
           <rapi-doc
             spec-url="./openapi.json"
             server-url="./"
+            default-api-server="./"
+            allow-server-selection="false"
             theme="dark"
             render-style="view"
             fill-request-fields-with-example="false"
