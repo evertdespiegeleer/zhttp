@@ -4,6 +4,8 @@
 
 It solves some of the major pains of building an API with express (handler typing, error handling, input/output validation, openapi...) while attempting to stay as flexible (read: _as close to plain express_) as possible.
 
+[🧪 Try out zhttp on Stackblitz!](https://stackblitz.com/~/github.com/evertdespiegeleer/zhttp-example-app?initialPath=%2Fapi.html)
+
 # Installation
 
 ```sh
