@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "1.0.0",
+  "version": "1.0.1-docs-website.0",
   "type": "module",
   "engines": {
     "node": "^20.10.x",
