@@ -21,17 +21,17 @@ export type MiddlewareHandler =
   | AsyncRequestHandler
   | AsyncErrorRequestHandler
 
-interface MiddlewareProps<Handler extends MiddlewareHandler> {
+interface MiddlewareProps {
   name?: string
-  handler: Handler
+  handler: MiddlewareHandler
   type: MiddlewareTypes
 }
 
 const log = loggerInstance.logger('zhttp:middlewareHandler')
 
-function middlewareWrapper<Handler extends MiddlewareHandler> (
-  middlewareProps: MiddlewareProps<Handler>
-): Handler {
+function middlewareWrapper (
+  middlewareProps: MiddlewareProps
+) {
   const middlewareHandler = middlewareProps.handler
   if (middlewareHandler.length === 3) {
     return async function (req: Request, res: Response, next: NextFunction) {
@@ -58,7 +58,7 @@ function middlewareWrapper<Handler extends MiddlewareHandler> (
       } catch (err) {
         next(err)
       }
-    } as Handler
+    } as RequestHandler
   }
 
   return async function (
@@ -91,11 +91,11 @@ function middlewareWrapper<Handler extends MiddlewareHandler> (
     } catch (err) {
       next(err)
     }
-  } as Handler
+  } as ErrorRequestHandler
 }
 
-export class Middleware<Handler extends MiddlewareHandler = MiddlewareHandler> {
-  constructor (private readonly options: MiddlewareProps<Handler>) {}
+export class Middleware {
+  constructor (private readonly options: MiddlewareProps) {}
 
   get type () {
     return this.options.type
@@ -106,8 +106,6 @@ export class Middleware<Handler extends MiddlewareHandler = MiddlewareHandler> {
   }
 }
 
-export const middleware = <
-  Handler extends MiddlewareHandler = MiddlewareHandler,
->(
-    options: MiddlewareProps<Handler>
-  ) => new Middleware<Handler>(options)
+export const middleware = (
+  options: MiddlewareProps
+) => new Middleware(options)
