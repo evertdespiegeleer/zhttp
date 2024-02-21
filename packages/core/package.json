@@ -1,15 +1,14 @@
 {
   "name": "@zhttp/core",
+  "version": "1.0.2",
   "description": "A minimal, strongly typed HTTP library with Zod validation",
-  "author": "Evert De Spiegeleer",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "1.0.2",
+  "license": "MIT",
+  "author": "Evert De Spiegeleer",
   "type": "module",
-  "types": "./dist/types/main.d.ts",
   "exports": {
     "import": {
       "types": "./dist/types/main.d.ts",
@@ -20,18 +19,15 @@
       "default": "./dist/cjs/main.cjs"
     }
   },
+  "types": "./dist/types/main.d.ts",
   "files": [
     "./dist",
     "./readme.md"
   ],
-  "engines": {
-    "node": "^20.10.x",
-    "npm": "^10.2.3"
-  },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc -p tsconfig.build.esm.json",
     "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
     "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination=./test-report.xml --loader ts-node/esm ./src/**/*.test.ts"
   },
   "dependencies": {
@@ -64,5 +60,9 @@
   "peerDependencies": {
     "@zhttp/errors": "1.0.2",
     "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": "^20.10.x",
+    "npm": "^10.2.3"
   }
 }
