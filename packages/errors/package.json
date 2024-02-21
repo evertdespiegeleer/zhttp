@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/errors",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Error library extending @zhttp/core",
   "repository": {
     "type": "git",
