@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/errors",
-  "version": "1.0.3",
+  "version": "1.0.4-259ddependabot-npm-and-yarn-chai-5-1-0.0",
   "description": "Error library extending @zhttp/core",
   "repository": {
     "type": "git",
