@@ -107,7 +107,7 @@ jobs:
         files: ./packages/*/test-report.xml
   
   pr-prerelease:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     needs:
       - lint
