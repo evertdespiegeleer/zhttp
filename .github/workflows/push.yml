@@ -162,3 +162,17 @@ jobs:
           git commit -am "chore(version): 📦 prerelease version bump to ${{ steps.version.outputs.version }}"
           git push
   
+  auto-merge:
+    needs:
+      - authorize
+      - build
+      - lint
+      - pr-prerelease
+      - test
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+        with:
+          github-token: ${{ secrets.automergetoken }}
