@@ -55,7 +55,7 @@
     "sinon": "^17.0.1",
     "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^4.4.4"
+    "typescript": "^5.4.2"
   },
   "peerDependencies": {
     "@zhttp/errors": "1.0.4-fb24dependabot-npm-and-yarn-types-cookie-parser-1-4-7.0",
