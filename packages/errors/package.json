@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/errors",
-  "version": "1.0.4-fb24dependabot-npm-and-yarn-types-cookie-parser-1-4-7.0",
+  "version": "1.0.4",
   "description": "Error library extending @zhttp/core",
   "repository": {
     "type": "git",
