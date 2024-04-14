@@ -54,7 +54,7 @@ export interface EndpointOptions<
     inputs: z.output<InputsSchema>,
     req: Request,
     res: Response,
-  ) => Promise<z.output<OutputSchema>>
+  ) => Promise<z.input<OutputSchema>>
   inputValidationSchema?: InputsSchema
   responseValidationSchema?: OutputSchema
   responseContentType: string
@@ -161,7 +161,7 @@ export class Endpoint<
       inputs: z.output<InputsSchema>,
       req: Request,
       res: Response,
-    ) => Promise<z.output<OutputSchema>>
+    ) => Promise<z.input<OutputSchema>>
   ) {
     this.options.handler = handler
     return this
