@@ -51,7 +51,7 @@ export interface EndpointOptions<
   oasInfo?: Partial<EndpointOasInfo>
   // TODO: everything inside inputs is actually part of req. Maybe it shouldn't be passed as a separate object?
   handler?: (
-    inputs: z.input<InputsSchema>,
+    inputs: z.output<InputsSchema>,
     req: Request,
     res: Response,
   ) => Promise<z.output<OutputSchema>>
@@ -158,7 +158,7 @@ export class Endpoint<
    * */
   handler (
     handler: (
-      inputs: z.input<InputsSchema>,
+      inputs: z.output<InputsSchema>,
       req: Request,
       res: Response,
     ) => Promise<z.output<OutputSchema>>
