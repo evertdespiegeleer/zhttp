@@ -1,15 +1,14 @@
 {
   "name": "@zhttp/errors",
+  "version": "1.0.5",
   "description": "Error library extending @zhttp/core",
-  "author": "Evert De Spiegeleer",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "1.0.1-docs-website.0",
+  "license": "MIT",
+  "author": "Evert De Spiegeleer",
   "type": "module",
-  "types": "./dist/types/main.d.ts",
   "exports": {
     "import": {
       "types": "./dist/types/main.d.ts",
@@ -20,18 +19,15 @@
       "default": "./dist/cjs/main.cjs"
     }
   },
+  "types": "./dist/types/main.d.ts",
   "files": [
     "./dist",
     "./readme.md"
   ],
-  "engines": {
-    "node": "^20.10.x",
-    "npm": "^10.2.3"
-  },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc -p tsconfig.build.esm.json",
     "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
     "test": "echo \"No tests here :)\""
   },
   "dependencies": {
@@ -44,5 +40,9 @@
   },
   "peerDependencies": {
     "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": "^20.10.x",
+    "npm": "^10.2.3"
   }
 }

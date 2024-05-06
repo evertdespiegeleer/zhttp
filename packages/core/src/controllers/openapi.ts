@@ -3,7 +3,7 @@ import { get } from '../util/endpoint.js'
 import { oasInstance } from '../app.js'
 
 export const openapiController = controller('OpenAPI')
-  .description('Meta information about the application')
+  .description('Exposes an OpenAPI spec and Rapidoc page')
   .endpoints([
     get('/openapi.json', 'getOpenAPISpec')
       .responseContentType('application/json')

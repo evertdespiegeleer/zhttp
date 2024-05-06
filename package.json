@@ -1,29 +1,25 @@
 {
   "name": "@zhttp/monorepo",
-  "author": "Evert De Spiegeleer",
-  "license": "MIT",
+  "version": "1.0.5",
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/evertdespiegeleer/zhttp.git"
   },
-  "version": "1.0.1-docs-website.0",
+  "license": "MIT",
+  "author": "Evert De Spiegeleer",
   "type": "module",
-  "engines": {
-    "node": "^20.10.x",
-    "npm": "^10.2.3"
-  },
   "workspaces": [
     "packages/errors",
     "packages/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "prepare": "npx husky install && cp ./readme.md ./packages/core || true",
     "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
-    "sync:readme": "npx embedme ./readme.md"
+    "prepare": "npx husky install && cp ./readme.md ./packages/core || true",
+    "sync:readme": "npx embedme ./readme.md",
+    "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.4.0",
@@ -37,5 +33,9 @@
     "husky": "^8.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^4.4.4"
+  },
+  "engines": {
+    "node": "^20.10.x",
+    "npm": "^10.2.3"
   }
 }

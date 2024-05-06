@@ -25,7 +25,7 @@ export function apiResponse<DataType = unknown> (
         ...opts?.meta
       },
       data
-    } satisfies z.infer<typeof zGenericApiOutput>
+    } satisfies z.output<typeof zGenericApiOutput>
   }
 
   return {
@@ -34,7 +34,7 @@ export function apiResponse<DataType = unknown> (
       ...opts?.meta
     },
     data
-  } satisfies z.infer<typeof zGenericApiOutput>
+  } satisfies z.output<typeof zGenericApiOutput>
 }
 
 const zErrorOutput = z.object({

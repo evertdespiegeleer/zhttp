@@ -51,10 +51,10 @@ export interface EndpointOptions<
   oasInfo?: Partial<EndpointOasInfo>
   // TODO: everything inside inputs is actually part of req. Maybe it shouldn't be passed as a separate object?
   handler?: (
-    inputs: z.infer<InputsSchema>,
+    inputs: z.output<InputsSchema>,
     req: Request,
     res: Response,
-  ) => Promise<z.infer<OutputSchema>>
+  ) => Promise<z.input<OutputSchema>>
   inputValidationSchema?: InputsSchema
   responseValidationSchema?: OutputSchema
   responseContentType: string
@@ -158,10 +158,10 @@ export class Endpoint<
    * */
   handler (
     handler: (
-      inputs: z.infer<InputsSchema>,
+      inputs: z.output<InputsSchema>,
       req: Request,
       res: Response,
-    ) => Promise<z.infer<OutputSchema>>
+    ) => Promise<z.input<OutputSchema>>
   ) {
     this.options.handler = handler
     return this
@@ -261,15 +261,14 @@ export const del = <Path extends string>(path: Path, name?: string) =>
 export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
   const endpointHandler = (req: Request, res: Response, next: NextFunction) => {
     // Input validation
+    let inputParams = {}
     try {
-      endpoint.getInputValidationSchema()?.parse(req)
+      inputParams = endpoint.getInputValidationSchema()?.parse(req)
     } catch (error) {
       const e = error as z.ZodError
       next(new ValidationError(e.message, e.issues))
       return
     }
-
-    const { params, query, body } = req
 
     if (endpoint.getHandler() == null) {
       next(new NotImplementedError())
@@ -277,7 +276,7 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
     }
 
     endpoint
-      .getHandler()?.({ params, query, body }, req, res)
+      .getHandler()?.(inputParams, req, res)
       .then((responseObj) => {
         // Output validation
         try {
