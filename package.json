@@ -11,7 +11,8 @@
   "type": "module",
   "workspaces": [
     "packages/errors",
-    "packages/*"
+    "packages/*",
+    "docs"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
