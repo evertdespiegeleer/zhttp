@@ -177,13 +177,6 @@ jobs:
           github-token: ${{ secrets.automergetoken }}
   docs:
     runs-on: ubuntu-latest
-    needs:
-      - authorize
-    permissions:
-      pages: write
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
