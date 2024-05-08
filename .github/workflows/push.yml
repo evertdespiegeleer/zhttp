@@ -177,6 +177,8 @@ jobs:
           github-token: ${{ secrets.automergetoken }}
   docs:
     runs-on: ubuntu-latest
+    needs:
+      - authorize
     permissions:
       contents: read
       pages: write
