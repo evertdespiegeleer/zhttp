@@ -175,25 +175,3 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           github-token: ${{ secrets.automergetoken }}
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Set Node.js 20.11.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.11.0
-      - name: Install Dependencies
-        run: npm ci
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Build docs
-        run: npm run -w './docs' build 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './docs/out'
