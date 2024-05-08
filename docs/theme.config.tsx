@@ -2,17 +2,30 @@ import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
 const config: DocsThemeConfig = {
-  logo: <span>My Project</span>,
+  logo: <span>zhttp</span>,
   project: {
-    link: 'https://github.com/shuding/nextra-docs-template',
+    link: 'https://github.com/evertdespiegeleer/zhttp',
   },
-  chat: {
-    link: 'https://discord.com',
+  docsRepositoryBase: 'https://github.com/evertdespiegeleer/zhttp/docs',
+  feedback: {
+    useLink: () => 'https://github.com/evertdespiegeleer/zhttp/issues',
   },
-  docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+  editLink: {
+    text: 'Edit this page on GitHub →',
+  },
   footer: {
-    text: 'Nextra Docs Template',
+    text: <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.8em'
+    }}>
+      <p>zhttp built with ❤️ by <a href="https://evertdespiegeleer.com">Evert De Spiegeleer</a></p>
+      <p>Docs generated with <a href="nextra.site">Nextra</a></p>
+    </div>
   },
+  toc: {
+    backToTop: true
+  }
 }
 
 export default config
