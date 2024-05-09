@@ -1,0 +1,9 @@
+# Order of execution
+
+- Server 'BEFORE' middlewares
+- Controller 'BEFORE' middlewares
+- Endpoint 'BEFORE' middlewares
+- **Endpoint handler**
+- Endpoint 'AFTER' middlewares
+- Controller 'AFTER' middlewares
+- Server 'AFTER' middlewares

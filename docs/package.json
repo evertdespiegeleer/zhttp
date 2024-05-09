@@ -1,0 +1,30 @@
+{
+  "name": "@zhttp/docs",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "fill-code-snippets": "npx embedme ./pages/**/*.*",
+    "prebuild": "npm run fill-code-snippets",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evertdespiegeleer/zhttp"
+  },
+  "bugs": {
+    "url": "https://github.com/evertdespiegeleer/zhttp"
+  },
+  "dependencies": {
+    "next": "^13.0.6",
+    "nextra": "latest",
+    "nextra-theme-docs": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.10",
+    "typescript": "^4.9.3"
+  }
+}

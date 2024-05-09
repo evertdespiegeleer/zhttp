@@ -1,0 +1,20 @@
+# OpenAPI
+
+## `openapiController`
+
+The package exports a special controller `openapiController`. When used, this controller exposes routes `/openapi.json` (the OpenAPI json spec) and `/api.html` (a [RapiDoc](https://rapidocweb.com/) api interface).
+
+## Programmatic access
+
+The openapi definition can be directly from the server object.
+
+```ts
+// ../../../examples/direct-openapi.ts
+
+import { server } from './concept-server.js'
+
+console.log(
+  server.oasInstance.getJsonSpec()
+)
+
+```

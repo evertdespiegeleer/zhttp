@@ -1,0 +1,19 @@
+{/* Splash page should come here */}
+{/* Redirect to /docs for now */}
+
+import { useEffect } from "react"
+
+export default function Home() {
+    useEffect(() => {
+        window.location.href = "/docs";
+    }, [])
+    return (
+        <div>
+            <p>
+                Redirecting to docs...
+            </p>
+        </div>
+    )
+}
+
+<Home />

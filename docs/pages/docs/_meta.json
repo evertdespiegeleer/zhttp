@@ -1,0 +1,10 @@
+{
+  "index": "Introduction",
+  "installation": "Installation",
+  "basic-usage-example": "Basic usage example",
+  "concepts": "Concepts",
+  "openapi": "OpenAPI",
+  "errors": "Errors",
+  "order-of-execution": "Order of execution",
+  "cjs": "CommonJS support"
+}

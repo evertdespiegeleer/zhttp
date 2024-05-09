@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/monorepo",
-  "version": "1.0.5",
+  "version": "1.0.6-docs-website.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "type": "module",
   "workspaces": [
     "packages/errors",
-    "packages/*"
+    "packages/*",
+    "docs"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
