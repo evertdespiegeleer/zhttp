@@ -25,10 +25,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.11.0
+    - name: Set Node.js 22
       uses: actions/setup-node@v3
       with:
-        node-version: 20.11.0
+        node-version: 22
 
     - name: Install Dependencies
       run: npm ci
@@ -45,10 +45,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.11.0
+    - name: Set Node.js 22
       uses: actions/setup-node@v3
       with:
-        node-version: 20.11.0
+        node-version: 22
 
     - name: Install Dependencies
       run: npm ci
@@ -76,10 +76,10 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Set Node.js 20.11.0
+    - name: Set Node.js 22
       uses: actions/setup-node@v3
       with:
-        node-version: 20.11.0
+        node-version: 22
     
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -121,10 +121,10 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set Node.js 20.11.0
+      - name: Set Node.js 22
         uses: actions/setup-node@v3
         with:
-          node-version: 20.11.0
+          node-version: 22
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4

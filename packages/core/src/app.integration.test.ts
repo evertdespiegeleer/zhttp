@@ -54,7 +54,7 @@ describe('app', () => {
 
     // server.start()
 
-    const helloRes = await supertest(server.expressInstance).get('/hello?name=Evert') as any
+    const helloRes = await (supertest(server.expressInstance).get('/hello?name=Evert') as any)
 
     expect(helloRes.status).to.be.equal(200)
     expect(helloRes.body).to.deep.eq(apiResponse('Hello Evert!'))
