@@ -1,0 +1,67 @@
+# Endpoints
+
+Endpoints are the building blocks of your API. They define the HTTP methods, paths, inputs, outputs, and behavior for each API call.
+As can be seen in the example below, endpoints are defined using a function chaining approach.
+These functions are further refered to as 'modulators'.
+
+## Handlers and input/output typing
+
+Endpoint handlers are similar to plain express handlers, with some extra feastures for strict input and output typing. Rather than the typical 2 express handler parameters (`request` and `response`), there's three: `inputs`, `request`, `response`.
+`inputs` is a typed object containing everything defined in the input schema. `request` and `response` are simply the express `request` and `response` objects.
+
+Sending out a response is as simle as returning a value in the handler function. Handler responses, just like inputs, are strictly typed. When an output schema is specified and the handler function doesn't return a value that corresponds to said schema, typescript will comlain.
+
+By default, every endpoint will send its response with a `application/json` content type. This is typial for APIs, but there might be exceptions. You can override this content type using the `responseContentType` modulator.
+
+### Using req/res directly
+
+You _can_ take input via the `request` object and use the `response` object to send a response in typical express manner, so migrating from express should be fairly trivial.
+However, beware that where you do this, you'll lose:
+- strict typing
+- output validation
+- AFTER-type middlewares
+
+## Routing
+An important distinction between plain express and zhttp is that zhttp – consciously – doesn't really support routing. The paths you see in your endpoint definitions are the paths that can be called; No hidden prefixes.
+
+## Basic endpoint example
+
+```ts
+// ../../../../examples/concept-endpoint.ts
+
+import { z } from 'zod'
+import { endpoint, get } from '@zhttp/core'
+
+const zGreetingOutput = z.object({
+  message: z.string()
+})
+
+const zGreetingInput = {
+  query: z.object({
+    name: z.string().optional()
+  })
+}
+
+// ⬇ For common http methods (get, post, put, del), utility functions are available:
+get('/hello', 'getGreeting')
+  .description('Say hello to everyone')
+  .input(zGreetingInput)
+  .response(zGreetingOutput)
+  .handler(async ({ query }) => {
+    return {
+      message: `Hello ${query.name ?? 'everyone'}!`
+    }
+  })
+
+// `endpoint` is a generic function which supports every http method.
+endpoint('get', '/goodbye', 'getGoodbye')
+  .description('Say goodbye to everyone')
+  .input(zGreetingInput)
+  .response(zGreetingOutput)
+  .handler(async ({ query }) => {
+    return {
+      message: `Goodbye ${query.name ?? 'everyone'}!`
+    }
+  })
+
+```

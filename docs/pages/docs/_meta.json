@@ -1,5 +1,10 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)"
+  "installation": "Installation",
+  "basic-usage-example": "Basic usage example",
+  "concepts": "Concepts",
+  "openapi": "OpenAPI",
+  "errors": "Errors",
+  "order-of-execution": "Order of execution",
+  "cjs": "CommonJS support"
 }

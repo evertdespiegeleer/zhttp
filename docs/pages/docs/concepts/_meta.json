@@ -1,0 +1,6 @@
+{
+  "endpoints": "Endpoints",
+  "controllers": "Controllers",
+  "middlewares": "Middlewares",
+  "servers": "Servers"
+}

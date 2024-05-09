@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "fill-code-snippets": "npx embedme ./pages/**/*.*",
+    "prebuild": "npm run fill-code-snippets",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"

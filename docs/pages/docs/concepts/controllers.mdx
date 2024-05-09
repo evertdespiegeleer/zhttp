@@ -1,0 +1,36 @@
+# Controllers
+
+An controller, essentially, is nothing but a group of endpoints.
+Just like individual endpoints, controllers can be assigned middlewares.
+Controllers do **not** serve as routers. Every endpoint path should be a _complete_ path.
+
+# Basic controller example
+
+```ts
+// ../../../../examples/concept-controller.ts
+
+import { z } from 'zod'
+import { controller, get } from '@zhttp/core'
+
+export const greetingController = controller('greeting')
+  .description('A controller that greets the world.')
+
+greetingController.endpoint(
+  get('/hello', 'getGreeting')
+    .description('Say hello to everyone')
+    .input({
+      query: z.object({
+        name: z.string().optional()
+      })
+    })
+    .response(z.object({
+      message: z.string()
+    }))
+    .handler(async ({ query }) => {
+      return {
+        message: `Hello ${query.name ?? 'everyone'}!`
+      }
+    })
+)
+
+```
