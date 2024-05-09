@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/monorepo",
-  "version": "1.0.6-docs-website.0",
+  "version": "1.0.6-chore-node-and-ts-update.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^8.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^4.4.4"
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": "^20.10.x",

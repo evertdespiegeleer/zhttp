@@ -21,10 +21,10 @@ jobs:
         steps:
           - name: Checkout code
             uses: actions/checkout@v4
-          - name: Set Node.js 20.11.0
+          - name: Set Node.js 22
             uses: actions/setup-node@v3
             with:
-              node-version: 20.11.0
+              node-version: 22
           - name: Install Dependencies
             run: npm ci
           - name: Setup Pages
