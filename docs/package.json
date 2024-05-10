@@ -1,7 +1,7 @@
 {
   "name": "@zhttp/docs",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.6-a551dependabot-npm-and-yarn-next-14-1-1.0",
   "scripts": {
     "fill-code-snippets": "npx embedme ./pages/**/*.*",
     "prebuild": "npm run fill-code-snippets",
@@ -17,7 +17,7 @@
     "url": "https://github.com/evertdespiegeleer/zhttp"
   },
   "dependencies": {
-    "next": "^13.0.6",
+    "next": "^14.1.1",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
     "react": "^18.2.0",
