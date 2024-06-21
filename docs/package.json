@@ -1,7 +1,7 @@
 {
   "name": "@zhttp/docs",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.6-060ddependabot-npm-and-yarn-braces-3-0-3.0",
   "scripts": {
     "fill-code-snippets": "npx embedme ./pages/**/*.*",
     "prebuild": "npm run fill-code-snippets",
