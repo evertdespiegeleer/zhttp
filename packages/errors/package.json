@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/errors",
-  "version": "1.0.6-docs-website.0",
+  "version": "1.0.6-060ddependabot-npm-and-yarn-braces-3-0-3.0",
   "description": "Error library extending @zhttp/core",
   "repository": {
     "type": "git",
