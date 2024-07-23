@@ -55,7 +55,7 @@
     "sinon": "^17.0.1",
     "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^4.4.4"
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "@zhttp/errors": "1.0.6-docs-website.0",
