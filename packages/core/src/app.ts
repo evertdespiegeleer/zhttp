@@ -24,6 +24,7 @@ interface IHTTPOptions {
   trustProxy?: boolean
   oasInfo?: OASInfo
   logger?: ILogger
+  bodyParserOptions?: bodyParser.OptionsJson
 }
 
 export let oasInstance: Oas
@@ -53,7 +54,7 @@ export class Server {
     this.httpServer = createServer(this.app)
 
     this.app.set('trust proxy', this.httpOptions.trustProxy)
-    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.json(httpOptions.bodyParserOptions))
     this.app.use(
       cors({
         credentials: true,
