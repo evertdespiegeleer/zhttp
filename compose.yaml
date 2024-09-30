@@ -1,7 +1,7 @@
 services:
   dev:
     build:
-      context: ''
+      context: '.'
       dockerfile: Dockerfile.dev
     volumes:
       - ./packages:/usr/src/app/packages
