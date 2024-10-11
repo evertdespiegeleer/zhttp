@@ -1,7 +1,7 @@
 {
   "name": "@zhttp/docs",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "fill-code-snippets": "npx embedme ./pages/**/*.*",
     "prebuild": "npm run fill-code-snippets",
