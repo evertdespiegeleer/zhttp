@@ -279,7 +279,7 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
       .getHandler()?.(inputParams, req, res)
       .then((responseObj) => {
         // Output validation
-        let postOutputValidationResponseObj: z.output<ReturnType<typeof endpoint.getResponseValidationSchema>> | undefined
+        let postOutputValidationResponseObj: z.output<ReturnType<typeof endpoint.getResponseValidationSchema>> = responseObj
         try {
           postOutputValidationResponseObj = endpoint.getResponseValidationSchema()?.parse(responseObj)
         } catch (error) {
