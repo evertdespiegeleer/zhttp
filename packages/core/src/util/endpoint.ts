@@ -279,14 +279,22 @@ export const endpointToExpressHandler = (endpoint: AnyEndpoint) => {
       .getHandler()?.(inputParams, req, res)
       .then((responseObj) => {
         // Output validation
-        let postOutputValidationResponseObj: z.output<ReturnType<typeof endpoint.getResponseValidationSchema>> = responseObj
-        try {
-          postOutputValidationResponseObj = endpoint.getResponseValidationSchema()?.parse(responseObj)
-        } catch (error) {
-          const e = error as z.ZodError
-          loggerInstance.logger('endpointOutputValidation').error(e)
-          next(new InternalServerError())
-          return
+        let postOutputValidationResponseObj: z.output<
+        NonNullable<ReturnType<typeof endpoint.getResponseValidationSchema>>
+        >
+
+        const responseValidationSchema = endpoint.getResponseValidationSchema()
+        if (responseValidationSchema != null) {
+          try {
+            postOutputValidationResponseObj = responseValidationSchema.parse(responseObj)
+          } catch (error) {
+            const e = error as z.ZodError
+            loggerInstance.logger('endpointOutputValidation').error(e)
+            next(new InternalServerError())
+            return
+          }
+        } else {
+          postOutputValidationResponseObj = responseObj
         }
 
         res.header('content-type', endpoint.getResponseContentType())
