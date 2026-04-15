@@ -15,7 +15,7 @@
     "docs"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @zhttp/errors -w @zhttp/core",
     "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npx husky install && cp ./readme.md ./packages/core || true",
