@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, before, after } from 'node:test'
 import { endpoint, endpointToExpressHandler } from './endpoint.js'
-import z from 'zod'
+import { z } from 'zod'
 import { zApiOutput, apiResponse } from './apiResponse.js'
 import { type Response, type Request, type NextFunction } from 'express'
 import sinon from 'sinon'
