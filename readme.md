@@ -367,6 +367,28 @@ validationExampleController.endpoint(
 
 ```
 
+# Migrating to v2 (Zod 4)
+
+Version 2 of zhttp upgrades from Zod 3 to Zod 4. This is a **breaking change** for library consumers.
+
+## Required changes
+
+1. **Upgrade Zod** — `npm install zod@^4.0.0`
+2. **TypeScript 5.5+** — Zod 4 requires TypeScript 5.5 or later with `"strict": true` in your `tsconfig.json`.
+3. **`ZodSchema` → `ZodType`** — If you reference `ZodSchema` in your own code (e.g. when extending zhttp types), rename it to `ZodType`. `ZodSchema` still works as a deprecated alias but will be removed in a future Zod release.
+
+## What stays the same
+
+- All runtime APIs (`z.object()`, `z.string()`, `.parse()`, `.safeParse()`, `z.infer<>`, `z.output<>`, `z.input<>`) work identically.
+- The `@zhttp/core` public API (`Server`, `controller`, `endpoint`, `get`, `post`, `put`, `del`, `middleware`, `zApiOutput`, `apiResponse`, `extendZodWithOpenApi`) is unchanged.
+- The `@zhttp/errors` public API is unchanged.
+- OpenAPI spec generation via `openapiController` and `extendZodWithOpenApi` works as before.
+
+## New capabilities from Zod 4
+
+- **Native JSON Schema** — `z.toJSONSchema(schema)` converts any Zod schema to JSON Schema (supports `draft-2020-12`, `draft-07`, `draft-04`, and `openapi-3.0` targets).
+- **Performance** — Zod 4 is significantly faster (up to 14x for string parsing, 7x for arrays) and produces a smaller bundle.
+
 # Order of execution
 - Server 'BEFORE' middlewares
 - Controller 'BEFORE' middlewares
