@@ -367,16 +367,6 @@ validationExampleController.endpoint(
 
 ```
 
-# Migrating to v2 (Zod 4)
-
-Version 2 of zhttp upgrades from Zod 3 to Zod 4. This is a **breaking change** for library consumers.
-
-## Required changes
-
-1. **Upgrade Zod** — `npm install zod@^4.0.0`
-2. **TypeScript 5.5+** — Zod 4 requires TypeScript 5.5 or later with `"strict": true` in your `tsconfig.json`.
-3. **`ZodSchema` → `ZodType`** — If you reference `ZodSchema` in your own code (e.g. when extending zhttp types), rename it to `ZodType`. `ZodSchema` still works as a deprecated alias but will be removed in a future Zod release.
-
 # Order of execution
 - Server 'BEFORE' middlewares
 - Controller 'BEFORE' middlewares
@@ -395,3 +385,13 @@ The JavaScript ecosystem is (slowly but steadily) moving towards ESM and away fr
 CommonJS is currently supported; the packages include both builds for ESM and CommonJS. You can use zhttp both ways.
 
 If major issues with supporting CommonJS were to come up, or if we'd notice that the package would become too big (by essentially having to ship the build code twice), CommonJS support might be dropped in the future.
+
+# Migrating to v2 (Zod 4)
+
+Version 2 of zhttp upgrades from Zod 3 to Zod 4. This is a **breaking change** for library consumers.
+
+## Required changes
+
+1. **Upgrade Zod** — `npm install zod@^4.0.0`
+2. **TypeScript 5.5+** — Zod 4 requires TypeScript 5.5 or later with `"strict": true` in your `tsconfig.json`.
+3. **`ZodSchema` → `ZodType`** — If you reference `ZodSchema` in your own code (e.g. when extending zhttp types), rename it to `ZodType`. `ZodSchema` still works as a deprecated alias but will be removed in a future Zod release.
