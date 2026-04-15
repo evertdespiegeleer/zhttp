@@ -31,7 +31,7 @@ validationExampleController.endpoint(
     .response(z.object({
       message: z.string()
     }))
-    .handler(async ({ query }) => {
+    .handler(async (_input) => {
       return {
         thisKeyShouldntBeHere: 'noBueno'
       } as any
