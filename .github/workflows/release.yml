@@ -31,9 +31,10 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: npm ci
@@ -52,7 +53,9 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance --registry=https://registry.npmjs.org
+        run: npm publish --workspaces --access=public --provenance
+        env:
+          NODE_AUTH_TOKEN: ''
 
       - name: Commit and push changes
         run: |
@@ -74,9 +77,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: npm ci
@@ -100,7 +104,9 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance --tag prerelease --registry=https://registry.npmjs.org
+        run: npm publish --workspaces --access=public --provenance --tag prerelease
+        env:
+          NODE_AUTH_TOKEN: ''
 
       - name: Commit and push changes
         run: |
