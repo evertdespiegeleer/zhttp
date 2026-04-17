@@ -56,9 +56,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance
-        env:
-          NODE_AUTH_TOKEN: ''
+        run: npm publish --workspaces --access=public
 
       - name: Commit and push changes
         run: |
@@ -110,9 +108,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance --tag prerelease
-        env:
-          NODE_AUTH_TOKEN: ''
+        run: npm publish --workspaces --access=public --tag prerelease
 
       - name: Commit and push changes
         run: |
