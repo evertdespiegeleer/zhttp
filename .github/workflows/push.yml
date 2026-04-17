@@ -9,13 +9,6 @@ on:
       - main
 
 jobs:
-  authorize:
-    environment:
-      ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: true
-
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -106,72 +99,15 @@ jobs:
       with:
         files: ./packages/*/test-report.xml
   
-  pr-prerelease:
-    if: github.event_name == 'pull_request_target' && github.event.action != 'closed'
-    runs-on: ubuntu-latest
-    needs:
-      - lint
-      - build
-      - authorize
-      # - test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Set Node.js 20.11.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.11.0
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: ./packages
-
-      - name: Install Dependencies
-        run: npm ci
-      
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
-      
-      - name: Configure Git
-        uses: fregante/setup-git-user@v1
-
-      - name: Version the packages
-        id: version
-        run: |
-          ./scripts/version.sh prerelease --preid $(echo "${{ steps.extract_branch.outputs.branch }}" | tr -cs 'a-zA-Z0-9-' '-' | sed 's/-$//')
-          export VERSION=$(cat package.json | jq -r '.version')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      
-      - name: Publish to npm
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_PUBLISH_TOKEN}}" >> ~/.npmrc
-          echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-          npm publish --workspaces --access=public --tag prerelease
-          rm -f ~/.npmrc
-
-      - name: Commit and push changes
-        run: |
-          git commit -am "chore(version): 📦 prerelease version bump to ${{ steps.version.outputs.version }}"
-          git push
   auto-merge:
     needs:
-      - authorize
       - build
       - lint
-      - pr-prerelease
       - test
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request_target' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           github-token: ${{ secrets.automergetoken }}
