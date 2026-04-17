@@ -53,7 +53,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: unset NODE_AUTH_TOKEN && npm publish --workspaces --access=public
+        run: |
+          unset NODE_AUTH_TOKEN
+          cd packages/errors && npm publish --access=public && cd ../..
+          cd packages/core && npm publish --access=public && cd ../..
 
       - name: Commit and push changes
         run: |
@@ -102,7 +105,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: unset NODE_AUTH_TOKEN && npm publish --workspaces --access=public --tag prerelease
+        run: |
+          unset NODE_AUTH_TOKEN
+          cd packages/errors && npm publish --access=public --tag prerelease && cd ../..
+          cd packages/core && npm publish --access=public --tag prerelease && cd ../..
 
       - name: Commit and push changes
         run: |
