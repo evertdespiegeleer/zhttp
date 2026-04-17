@@ -19,6 +19,7 @@ jobs:
   release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    environment: npm-publish
     permissions:
       contents: write
       id-token: write
@@ -65,8 +66,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
-    environment:
-      ${{ github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
+    environment: npm-publish
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
