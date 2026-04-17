@@ -52,7 +52,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance
+        run: npm publish --workspaces --access=public --provenance --registry=https://registry.npmjs.org
 
       - name: Commit and push changes
         run: |
@@ -100,7 +100,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
-        run: npm publish --workspaces --access=public --provenance --tag prerelease
+        run: npm publish --workspaces --access=public --provenance --tag prerelease --registry=https://registry.npmjs.org
 
       - name: Commit and push changes
         run: |
