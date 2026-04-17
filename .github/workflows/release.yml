@@ -30,10 +30,10 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
 
-      - name: Set Node.js 20.10
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.10
+          node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
@@ -74,10 +74,10 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set Node.js 20.11.0
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.11.0
+          node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
