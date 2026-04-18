@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { register } from 'node:module'
-register('tsx/esm', import.meta.url)
+import { register } from 'tsx/esm/api'
+register()
 
 import { resolve } from 'node:path'
 import { writeFile } from 'node:fs/promises'
