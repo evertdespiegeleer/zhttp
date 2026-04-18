@@ -15,7 +15,7 @@
     "docs"
   ],
   "scripts": {
-    "build": "npm run build -w @zhttp/errors -w @zhttp/core",
+    "build": "npm run build -w @zhttp/errors -w @zhttp/core -w @zhttp/extract-oas",
     "lint": "eslint 'packages/*/src/**/*.ts' 'examples/*.ts'",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npx husky install && cp ./readme.md ./packages/core || true",

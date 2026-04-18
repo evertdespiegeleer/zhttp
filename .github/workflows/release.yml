@@ -67,6 +67,7 @@ jobs:
           unset NODE_AUTH_TOKEN
           cd packages/errors && npm publish --access=public && cd ../..
           cd packages/core && npm publish --access=public && cd ../..
+          cd packages/extract-oas && npm publish --access=public && cd ../..
 
       - name: Commit and push changes
         run: |
@@ -129,6 +130,7 @@ jobs:
           unset NODE_AUTH_TOKEN
           cd packages/errors && npm publish --access=public --tag prerelease && cd ../..
           cd packages/core && npm publish --access=public --tag prerelease && cd ../..
+          cd packages/extract-oas && npm publish --access=public --tag prerelease && cd ../..
 
       - name: Commit and push changes
         run: |
