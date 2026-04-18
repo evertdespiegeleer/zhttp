@@ -75,3 +75,5 @@ if (argv.type === 'yaml') {
 
 await writeFile(outputPath, content, 'utf-8')
 console.log(`OpenAPI spec written to ${outputPath}`)
+// Force exit to avoid any lingering processes (e.g. from the server file)
+process.exit(0)
