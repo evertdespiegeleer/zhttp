@@ -1,6 +1,6 @@
 ---
 name: zhttp
-description: "How to build type-safe HTTP APIs using the @zhttp/core and @zhttp/errors libraries (Express + Zod). Use this skill whenever writing API endpoints, controllers, middleware, error handling, or OpenAPI specs with zhttp — even if the user just says 'add an endpoint' or 'create an API route' in a project that depends on @zhttp/core."
+description: "How to build type-safe HTTP APIs using the @zhttp/core and @zhttp/errors libraries (Express + Zod), and how to extract OpenAPI specs with @zhttp/extract-oas. Use this skill whenever writing API endpoints, controllers, middleware, error handling, or OpenAPI specs with zhttp — even if the user just says 'add an endpoint' or 'create an API route' in a project that depends on @zhttp/core. Also use when the user wants to extract, export, or generate an OpenAPI spec file from a zhttp server."
 ---
 
 # zhttp
@@ -282,6 +282,59 @@ Call `extendZodWithOpenApi(z)` once at startup to enable `.openapi()` on Zod sch
 
 ```ts
 const spec = server.oasInstance.getJsonSpec()
+```
+
+## Extracting OpenAPI specs with @zhttp/extract-oas
+
+`@zhttp/extract-oas` is a CLI tool that imports a zhttp Server instance and writes its OpenAPI spec to a file. It handles TypeScript files natively (via `tsx`), so no pre-compilation is needed.
+
+### Installation
+
+```bash
+npm install @zhttp/extract-oas
+```
+
+### Usage
+
+```bash
+npx @zhttp/extract-oas \
+  --serverfile="./src/server.ts" \
+  --serverexport="server" \
+  --output="./openapi-spec.json" \
+  --type="json"
+```
+
+### Options
+
+| Option | Alias | Required | Description |
+|---|---|---|---|
+| `--serverfile` | `-i` | Yes | Path to the file that exports the Server instance |
+| `--serverexport` | | Yes | Name of the exported Server variable |
+| `--output` | `-o` | Yes | Output file path |
+| `--type` | `-t` | No | `json` (default) or `yaml` |
+
+### How it works
+
+The tool dynamically imports the server file, accesses `server.oasInstance.getJsonSpec()`, and writes the result. The server file must export a constructed `Server` instance (the controllers and endpoints must be wired up at import time so the OAS registry is populated).
+
+Example server file that works with the tool:
+
+```ts
+// src/server.ts
+import { Server, openapiController } from '@zhttp/core'
+import { usersController } from './controllers/users.js'
+
+export const server = new Server(
+  { controllers: [usersController, openapiController] },
+  { oasInfo: { title: 'My API', version: '1.0.0' } }
+)
+// Don't call server.start() at module level — the tool only needs the instance
+```
+
+Then extract:
+
+```bash
+npx @zhttp/extract-oas -i ./src/server.ts --serverexport server -o ./openapi.yaml -t yaml
 ```
 
 ## Key things to remember
