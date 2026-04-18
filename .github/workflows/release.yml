@@ -53,7 +53,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Pack tarballs
-        run: npm pack --workspaces --pack-destination ./tarballs
+        run: mkdir -p ./tarballs && npm pack --workspaces --pack-destination ./tarballs
 
       - name: Upload tarballs
         uses: actions/upload-artifact@v4
@@ -115,7 +115,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Pack tarballs
-        run: npm pack --workspaces --pack-destination ./tarballs
+        run: mkdir -p ./tarballs && npm pack --workspaces --pack-destination ./tarballs
 
       - name: Upload tarballs
         uses: actions/upload-artifact@v4
