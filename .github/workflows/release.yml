@@ -52,7 +52,17 @@ jobs:
           export VERSION=$(cat package.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Pack tarballs
+        run: npm pack --workspaces --pack-destination ./tarballs
+
+      - name: Upload tarballs
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-packages-${{ steps.version.outputs.version }}
+          path: ./tarballs/*.tgz
+
       - name: Publish to npm
+        continue-on-error: true
         run: |
           unset NODE_AUTH_TOKEN
           cd packages/errors && npm publish --access=public && cd ../..
@@ -104,7 +114,17 @@ jobs:
           export VERSION=$(cat package.json | jq -r '.version')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Pack tarballs
+        run: npm pack --workspaces --pack-destination ./tarballs
+
+      - name: Upload tarballs
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-packages-${{ steps.version.outputs.version }}
+          path: ./tarballs/*.tgz
+
       - name: Publish to npm
+        continue-on-error: true
         run: |
           unset NODE_AUTH_TOKEN
           cd packages/errors && npm publish --access=public --tag prerelease && cd ../..
