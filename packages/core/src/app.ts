@@ -2,7 +2,7 @@
 import express, { type Application } from 'express'
 import { type Server as NodeHttpServer, createServer } from 'node:http'
 import cors from 'cors'
-import bodyParser from 'body-parser'
+import type { OptionsJson as BodyParserOptionsJson } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { type Controller, bindControllerToApp } from './util/controller.js'
 import { type Middleware, MiddlewareTypes } from './util/middleware.js'
@@ -24,7 +24,7 @@ interface IHTTPOptions {
   trustProxy?: boolean
   oasInfo?: OASInfo
   logger?: ILogger
-  bodyParserOptions?: bodyParser.OptionsJson
+  bodyParserOptions?: BodyParserOptionsJson
 }
 
 export let oasInstance: Oas
@@ -54,7 +54,7 @@ export class Server {
     this.httpServer = createServer(this.app)
 
     this.app.set('trust proxy', this.httpOptions.trustProxy)
-    this.app.use(bodyParser.json(httpOptions.bodyParserOptions))
+    this.app.use(express.json(httpOptions.bodyParserOptions))
     this.app.use(
       cors({
         credentials: true,
