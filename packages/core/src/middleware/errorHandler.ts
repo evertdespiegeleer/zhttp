@@ -38,6 +38,6 @@ export const errorHandlerMiddleware = middleware({
     }
 
     res.status(status).json(apiResponse({}, { error: parsedError }))
-    return res.end()
+    res.end()
   }
 })
