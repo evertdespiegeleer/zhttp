@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, before, after } from 'node:test'
-import { endpoint, endpointToExpressHandler } from './endpoint.js'
+import { endpoint, endpointToExpressHandler, get } from './endpoint.js'
 import z from 'zod'
 import { zApiOutput, apiResponse } from './apiResponse.js'
-import { type Response, type Request, type NextFunction } from 'express'
+import express, { type Response, type Request, type NextFunction, type Express } from 'express'
 import sinon from 'sinon'
 import { NotImplementedError, ValidationError } from '@zhttp/errors'
+import supertest from 'supertest';
 import { expect } from 'chai'
+import { bindControllerToApp, controller } from './controller.js'
 
 const promisifyExpressHandler = async (
   handler: (req: Request, res: Response, next: NextFunction) => unknown,
@@ -36,14 +38,17 @@ const promisifyExpressHandler = async (
 
 describe('endpoint', () => {
   // Servertime is typically included in the api response, so we have to make sure the clock doesn't tick when checking responses
-  let clock: sinon.SinonFakeTimers
+  let clock: sinon.SinonFakeTimers;
+  let app: Express;
+
   before(function () {
-    clock = sinon.useFakeTimers()
-  })
+    clock = sinon.useFakeTimers();
+    app = express();
+  });
 
   after(function () {
-    clock.restore()
-  })
+    clock.restore();
+  });
 
   // This test doesn't actually expect anything, it's about the typing of the test itself and not running into errors when defining it
   it('Can be defined with correct typing', async () => {
@@ -146,4 +151,34 @@ describe('endpoint', () => {
     expect(error).to.be.instanceOf(NotImplementedError)
     expect(response).to.be.undefined
   })
+
+  it('Can support regex in the endpoint', async () => {
+    const testController = controller('testController')
+      .description('A controller just to test regex support in endpoints')
+      .endpoints([
+        get('/resources/:resourceId((?!except)[a-zA-Z0-9]{6})')
+          .description('Should be able to get a resource by id of 6 alphanumeric chars with exception of "except"')
+          .input(
+            z.object({
+              params: z.object({
+                resourceId: z.string(),
+              }),
+            }),
+          )
+          .handler(async ({ params: { resourceId } }) => {
+            return apiResponse({ resourceId });
+          }),
+      ]);
+
+    bindControllerToApp(testController, app);
+
+    const existingEndpoint = await supertest(app).get('/resources/abc123');
+    expect(existingEndpoint?.status).to.eq(200);
+
+    const nonExistingEndpoint = await supertest(app).get('/resources/abc123toolong');
+    expect(nonExistingEndpoint?.status).to.eq(404);
+
+    const nonMatchedExceptionEndpoint = await supertest(app).get('/resources/except');
+    expect(nonMatchedExceptionEndpoint?.status).to.eq(404);
+  });
 })

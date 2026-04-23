@@ -21,14 +21,20 @@ const methods = [
 export type Method = (typeof methods)[number]
 
 type ExtractRouteParams<Path extends string> = string extends Path
-  ? Record<string, ZodString>
+? Record<string, ZodString>
+: // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Path extends `${infer _Start}:${infer Param}(${string})/${infer Rest}`
+  ? { [K in Param | keyof ExtractRouteParams<Rest>]: ZodString }
   : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Path extends `${infer _Start}:${infer Param}/${infer Rest}`
-    ? { [K in Param | keyof ExtractRouteParams<Rest>]?: ZodString }
+    Path extends `${infer _Start}:${infer Param}/${infer Rest}`
+    ? { [K in Param | keyof ExtractRouteParams<Rest>]: ZodString }
     : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Path extends `${infer _Start}:${infer Param}`
+      Path extends `${infer _Start}:${infer Param}(${string})`
       ? { [K in Param]: ZodString }
-      : ZodRawShape
+      : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Path extends `${infer _Start}:${infer Param}`
+        ? { [K in Param]: ZodString }
+        : ZodRawShape;
 
 export type InputValidationSchema<Path extends string> = ZodObject<{
   params?: ZodObject<ExtractRouteParams<Path>>
