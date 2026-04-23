@@ -22,7 +22,6 @@ jobs:
     environment: npm-publish
     permissions:
       contents: write
-      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,10 +62,10 @@ jobs:
 
       - name: Publish to npm
         continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          unset NODE_AUTH_TOKEN
-          cd packages/errors && npm publish --access=public && cd ../..
-          cd packages/core && npm publish --access=public && cd ../..
+          npm publish --workspaces --access=public
 
       - name: Commit and push changes
         run: |
@@ -78,7 +77,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     environment: npm-publish
     steps:
       - name: Checkout code
@@ -125,8 +123,9 @@ jobs:
 
       - name: Publish to npm
         continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          unset NODE_AUTH_TOKEN
           cd packages/errors && npm publish --access=public --tag prerelease && cd ../..
           cd packages/core && npm publish --access=public --tag prerelease && cd ../..
 
