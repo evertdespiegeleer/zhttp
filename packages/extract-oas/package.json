@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/extract-oas",
-  "version": "1.1.4-refactor-zod-4.6",
+  "version": "1.1.4-refactor-zod-4.7",
   "description": "CLI tool to extract OpenAPI specs from zhttp servers",
   "repository": {
     "type": "git",
