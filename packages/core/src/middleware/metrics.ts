@@ -1,4 +1,4 @@
-import { type NextFunction, type Request, type Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import { Counter } from 'prom-client'
 import { MiddlewareTypes, middleware } from '../util/middleware.js'
 
@@ -13,7 +13,7 @@ const metrics = {
 export const metricMiddleware = middleware({
   name: 'metricMiddleware',
   type: MiddlewareTypes.BEFORE,
-  handler (req: Request, res: Response, next: NextFunction) {
+  handler(req: Request, res: Response, next: NextFunction) {
     res.once('finish', () => {
       metrics.httpRequests.inc({
         method: req.method,

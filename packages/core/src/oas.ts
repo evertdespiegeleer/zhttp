@@ -1,15 +1,11 @@
-import {
-  OpenAPIRegistry,
-  OpenApiGeneratorV3,
-  extendZodWithOpenApi
-} from '@asteasolutions/zod-to-openapi'
-import { type AnyEndpoint } from './util/endpoint.js'
+import { extendZodWithOpenApi, OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
-import { type Controller } from './util/controller.js'
+import type { Controller } from './util/controller.js'
+import type { AnyEndpoint } from './util/endpoint.js'
 
 extendZodWithOpenApi(z)
 
-function pathToTitle (input: string): string {
+function pathToTitle(input: string): string {
   return (
     input
       // Split the string on non-alphanumeric characters.
@@ -23,9 +19,7 @@ function pathToTitle (input: string): string {
   )
 }
 
-export type OASInfo = Partial<
-Parameters<OpenApiGeneratorV3['generateDocument']>[0]['info']
->
+export type OASInfo = Partial<Parameters<OpenApiGeneratorV3['generateDocument']>[0]['info']>
 export type EndpointOasInfo = Parameters<OpenAPIRegistry['registerPath']>['0']
 interface TagObject {
   name: string
@@ -36,18 +30,16 @@ const zAnyResponse = z.any().openapi('UntypedResponse')
 
 export class Oas {
   private readonly registry: OpenAPIRegistry
-  private document:
-  | ReturnType<OpenApiGeneratorV3['generateDocument']>
-  | undefined
+  private document: ReturnType<OpenApiGeneratorV3['generateDocument']> | undefined
 
   private readonly tags: TagObject[]
 
-  constructor (private readonly oasInfo: OASInfo | undefined) {
+  constructor(private readonly oasInfo: OASInfo | undefined) {
     this.registry = new OpenAPIRegistry()
     this.tags = []
   }
 
-  addController (controller: Controller) {
+  addController(controller: Controller) {
     controller.getEndpoints().forEach((endpoint) => {
       this.addEndpoint(endpoint, controller.getName())
     })
@@ -67,16 +59,12 @@ export class Oas {
     }
   }
 
-  private addEndpoint (endpoint: AnyEndpoint, controllerName?: string) {
+  private addEndpoint(endpoint: AnyEndpoint, controllerName?: string) {
     const name = endpoint.getName()
-    const backupName = `${endpoint.getMethod().toLowerCase()}${pathToTitle(
-      endpoint.getPath()
-    )}`
+    const backupName = `${endpoint.getMethod().toLowerCase()}${pathToTitle(endpoint.getPath())}`
     const bodyValidationSchema = endpoint.getInputValidationSchema()?.shape.body
     this.registry.registerPath({
-      operationId: `${controllerName ?? ''}${
-        name ?? backupName
-      }`,
+      operationId: `${controllerName ?? ''}${name ?? backupName}`,
       summary: name,
       description: endpoint.getDescription(),
       method: endpoint.getMethod(),
@@ -86,15 +74,15 @@ export class Oas {
         params: endpoint.getInputValidationSchema()?.shape.params,
         query: endpoint.getInputValidationSchema()?.shape.query,
         body:
-        bodyValidationSchema != null
-          ? {
-              content: {
-                'application/json': {
-                  schema: bodyValidationSchema
+          bodyValidationSchema != null
+            ? {
+                content: {
+                  'application/json': {
+                    schema: bodyValidationSchema
+                  }
                 }
               }
-            }
-          : undefined
+            : undefined
       },
       responses: {
         200: {
@@ -110,7 +98,7 @@ export class Oas {
     })
   }
 
-  getJsonSpec () {
+  getJsonSpec() {
     if (this.document == null) {
       const generator = new OpenApiGeneratorV3(this.registry.definitions)
       this.document = generator.generateDocument({

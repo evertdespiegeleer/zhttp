@@ -1,23 +1,17 @@
+import { apiResponse, controller, get, openapiController, Server, zApiOutput } from '@zhttp/core'
 import { z } from 'zod'
-import {
-  Server,
-  controller,
-  get,
-  zApiOutput,
-  apiResponse,
-  openapiController
-} from '@zhttp/core'
 
 // You can optionally add OAS info to a Zod schema using zodSchema.openapi(...).
 // If this schema is used in the input or output of an endpoint, the info
 // will be included in the generated openapi spec.
 
-const zHelloResponse = zApiOutput(z.object({
-  greeting: z.string().openapi({ example: 'Hello Joske!' })
-})).openapi('HelloResponse')
+const zHelloResponse = zApiOutput(
+  z.object({
+    greeting: z.string().openapi({ example: 'Hello Joske!' })
+  })
+).openapi('HelloResponse')
 
-const helloController = controller('Hello')
-  .description('This controller says hello to everyone')
+const helloController = controller('Hello').description('This controller says hello to everyone')
 
 helloController.endpoint(
   get('/hello')
@@ -35,19 +29,18 @@ helloController.endpoint(
     })
 )
 
-const server = new Server({
-  controllers: [
-    helloController,
-    openapiController
-  ],
-  middlewares: []
-}, {
-  port: 3000,
-  oasInfo: {
-    title: 'A very cool api',
-    version: '1.0.0'
+const server = new Server(
+  {
+    controllers: [helloController, openapiController],
+    middlewares: []
+  },
+  {
+    port: 3000,
+    oasInfo: {
+      title: 'A very cool api',
+      version: '1.0.0'
+    }
   }
-})
+)
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 server.start()

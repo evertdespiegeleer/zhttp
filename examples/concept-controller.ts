@@ -1,8 +1,7 @@
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
+import { z } from 'zod'
 
-export const greetingController = controller('greeting')
-  .description('A controller that greets the world.')
+export const greetingController = controller('greeting').description('A controller that greets the world.')
 
 greetingController.endpoint(
   get('/hello', 'getGreeting')
@@ -12,9 +11,11 @@ greetingController.endpoint(
         name: z.string().optional()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ query }) => {
       return {
         message: `Hello ${query.name ?? 'everyone'}!`

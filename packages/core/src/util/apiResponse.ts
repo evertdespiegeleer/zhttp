@@ -5,17 +5,12 @@ interface IApiResponseOptions {
   meta?: Record<string, string | number>
 }
 
-export function apiResponse<DataType = unknown> (
-  data: DataType,
-  opts?: IApiResponseOptions
-) {
+export function apiResponse<DataType = unknown>(data: DataType, opts?: IApiResponseOptions) {
   if (opts?.error != null) {
     const errorDetails = {
       code: opts.error?.name ?? 'InternalServerError',
 
-      details: opts.error?.details != null
-        ? opts.error?.details
-        : {}
+      details: opts.error?.details != null ? opts.error?.details : {}
     }
 
     return {
@@ -71,12 +66,10 @@ const zMetaDataOutput = z.object({
  * })
  * ```
  */
-export const zApiOutput = <OutputSchema extends z.ZodType>(
-  dataSchema: OutputSchema
-) =>
-    z.object({
-      meta: zMetaDataOutput,
-      data: dataSchema
-    })
+export const zApiOutput = <OutputSchema extends z.ZodType>(dataSchema: OutputSchema) =>
+  z.object({
+    meta: zMetaDataOutput,
+    data: dataSchema
+  })
 
 const zGenericApiOutput = zApiOutput(z.any())

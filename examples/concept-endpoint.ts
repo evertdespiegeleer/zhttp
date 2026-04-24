@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { endpoint, get } from '@zhttp/core'
+import { z } from 'zod'
 
 const zGreetingOutput = z.object({
   message: z.string()

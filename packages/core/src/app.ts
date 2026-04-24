@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import express, { type Application } from 'express'
-import { type Server as NodeHttpServer, createServer } from 'node:http'
-import cors from 'cors'
+import { createServer, type Server as NodeHttpServer } from 'node:http'
+import { BadRequestError } from '@zhttp/errors'
 import type { OptionsJson as BodyParserOptionsJson } from 'body-parser'
 import cookieParser from 'cookie-parser'
-import { type Controller, bindControllerToApp } from './util/controller.js'
-import { type Middleware, MiddlewareTypes } from './util/middleware.js'
+import cors from 'cors'
+import express, { type Application } from 'express'
 import { errorHandlerMiddleware } from './middleware/errorHandler.js'
 import { metricMiddleware } from './middleware/metrics.js'
 import { type OASInfo, Oas } from './oas.js'
-import { BadRequestError } from '@zhttp/errors'
-import { type ILogger, defaultLogger, loggerInstance } from './util/logger.js'
+import { bindControllerToApp, type Controller } from './util/controller.js'
+import { defaultLogger, type ILogger, loggerInstance } from './util/logger.js'
+import { type Middleware, MiddlewareTypes } from './util/middleware.js'
 
 interface RoutingOptions {
   controllers?: Controller[]
@@ -34,7 +33,7 @@ export class Server {
   private httpServer: NodeHttpServer
   private readonly appLogger
 
-  constructor (
+  constructor(
     private readonly options: RoutingOptions = {},
     private readonly httpOptions: IHTTPOptions = {},
     private readonly externalApplication?: Application
@@ -61,11 +60,7 @@ export class Server {
         origin: (origin: string | undefined, callback: CallableFunction) => {
           if (origin == null || origin === 'null') return callback(null, true)
           const allowedOrigins = this.httpOptions.allowedOrigins ?? []
-          if (
-            origin == null ||
-            allowedOrigins.includes(origin) ||
-            this.httpOptions.bypassAllowedOrigins === true
-          ) {
+          if (origin == null || allowedOrigins.includes(origin) || this.httpOptions.bypassAllowedOrigins === true) {
             callback(null, true)
           } else {
             this.appLogger.warn(`Origin ${origin} not allowed`)
@@ -77,11 +72,7 @@ export class Server {
     this.app.use(cookieParser())
 
     // Set default middlewares
-    this.options.middlewares = [
-      ...(this.options.middlewares ?? []),
-      metricMiddleware,
-      errorHandlerMiddleware
-    ]
+    this.options.middlewares = [...(this.options.middlewares ?? []), metricMiddleware, errorHandlerMiddleware]
 
     // run all global before middlewares
     this.options.middlewares
@@ -105,27 +96,25 @@ export class Server {
       })
   }
 
-  get expressInstance () {
+  get expressInstance() {
     return this.app
   }
 
-  get oasInstance () {
+  get oasInstance() {
     return oasInstance
   }
 
-  get server () {
+  get server() {
     return this.httpServer
   }
 
-  async start () {
+  async start() {
     this.httpServer = this.httpServer.listen(this.httpOptions.port, () => {
-      this.appLogger.info(
-        `HTTP server listening on port ${this.httpOptions.port}`
-      )
+      this.appLogger.info(`HTTP server listening on port ${this.httpOptions.port}`)
     })
   }
 
-  async stop () {
+  async stop() {
     if (this.httpServer != null) {
       this.httpServer.close()
       this.appLogger.info('HTTP server stopped')

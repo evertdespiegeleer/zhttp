@@ -1,17 +1,20 @@
-import { type RequestHandler, type ErrorRequestHandler, type Request, type Response, type NextFunction } from 'express'
 import { isPromise } from 'node:util/types'
+import type { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express'
 import { loggerInstance } from './logger.js'
 
 export enum MiddlewareTypes {
   BEFORE,
-  AFTER,
+  AFTER
 }
 
-export type BeforeMiddlewareHandler =
-  (req: Request, res: Response, next: NextFunction) => void | Promise<void>
+export type BeforeMiddlewareHandler = (req: Request, res: Response, next: NextFunction) => void | Promise<void>
 
-export type AfterMiddlewareHandler =
-  (err: Error, req: Request, res: Response, next: NextFunction) => void | Promise<void>
+export type AfterMiddlewareHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void | Promise<void>
 
 export type MiddlewareHandler = BeforeMiddlewareHandler | AfterMiddlewareHandler
 
@@ -21,17 +24,14 @@ type MiddlewareProps =
 
 const log = loggerInstance.logger('zhttp:middlewareHandler')
 
-function middlewareWrapper (
-  middlewareProps: MiddlewareProps
-) {
+function middlewareWrapper(middlewareProps: MiddlewareProps) {
   const middlewareHandler = middlewareProps.handler
   if (middlewareHandler.length === 3) {
-    return async function (req: Request, res: Response, next: NextFunction) {
+    return (async (req: Request, res: Response, next: NextFunction) => {
       if (res.headersSent) {
-        log.info(
-          `Exiting middleware ${middlewareProps.name} early, headers already sent`
-        )
-        next(); return
+        log.info(`Exiting middleware ${middlewareProps.name} early, headers already sent`)
+        next()
+        return
       }
       try {
         const m = middlewareHandler as BeforeMiddlewareHandler
@@ -42,20 +42,14 @@ function middlewareWrapper (
       } catch (err) {
         next(err)
       }
-    } as RequestHandler
+    }) as RequestHandler
   }
 
-  return async function (
-    prevError: Error,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  return (async (prevError: Error, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
-      log.info(
-        `Exiting middleware ${middlewareProps.name} early, headers already sent`
-      )
-      next(); return
+      log.info(`Exiting middleware ${middlewareProps.name} early, headers already sent`)
+      next()
+      return
     }
     try {
       const m = middlewareHandler as AfterMiddlewareHandler
@@ -66,21 +60,19 @@ function middlewareWrapper (
     } catch (err) {
       next(err)
     }
-  } as ErrorRequestHandler
+  }) as ErrorRequestHandler
 }
 
 export class Middleware {
-  constructor (private readonly options: MiddlewareProps) {}
+  constructor(private readonly options: MiddlewareProps) {}
 
-  get type () {
+  get type() {
     return this.options.type
   }
 
-  get handler () {
+  get handler() {
     return middlewareWrapper(this.options)
   }
 }
 
-export const middleware = (
-  options: MiddlewareProps
-) => new Middleware(options)
+export const middleware = (options: MiddlewareProps) => new Middleware(options)

@@ -1,6 +1,6 @@
+import { oasInstance } from '../app.js'
 import { controller } from '../util/controller.js'
 import { get } from '../util/endpoint.js'
-import { oasInstance } from '../app.js'
 
 export const openapiController = controller('OpenAPI')
   .description('Exposes an OpenAPI spec and Rapidoc page')

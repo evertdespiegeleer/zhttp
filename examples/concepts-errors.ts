@@ -1,6 +1,6 @@
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
 import { NotFoundError } from '@zhttp/errors'
+import { z } from 'zod'
 
 // Let's presume we're talking to some sort of database
 const db: any = undefined
@@ -14,9 +14,11 @@ vegetablesController.endpoint(
         vegetableId: z.string().uuid()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ params: { vegetableId } }) => {
       const vegetableDetails = await db.getVegetableById(vegetableId)
       if (vegetableDetails == null) {

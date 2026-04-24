@@ -1,23 +1,21 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, before, after } from 'node:test'
-import { get } from './endpoint.js'
-import { z } from 'zod'
-import { zApiOutput, apiResponse } from './apiResponse.js'
-import { bindControllerToApp, controller } from './controller.js'
+import { after, before, describe, it } from 'node:test'
+import { expect } from 'chai'
+import express, { type Express } from 'express'
 import sinon from 'sinon'
 import supertest from 'supertest'
-import express, { type Express } from 'express'
-import { expect } from 'chai'
+import { z } from 'zod'
+import { apiResponse, zApiOutput } from './apiResponse.js'
+import { bindControllerToApp, controller } from './controller.js'
+import { get } from './endpoint.js'
 
 describe('controller', () => {
   // Servertime is typically included in the api response, so we have to make sure the clock doesn't tick when checking responses
   let clock: sinon.SinonFakeTimers
-  before(function () {
+  before(() => {
     clock = sinon.useFakeTimers()
   })
 
-  after(function () {
+  after(() => {
     clock.restore()
   })
 
@@ -76,15 +74,13 @@ describe('controller', () => {
 
     bindControllerToApp(greetingController, app)
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    const helloRes = await supertest(app).get('/hello?name=Evert') as any
+    const helloRes = (await supertest(app).get('/hello?name=Evert')) as any
 
     expect(helloRes.status).to.be.equal(200)
     expect(helloRes.body).to.deep.eq(apiResponse('Hello Evert!'))
     expect(helloRes.body.meta).to.not.have.key('error')
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    const goodbyeRes = await supertest(app).get('/goodbye?name=Evert') as any
+    const goodbyeRes = (await supertest(app).get('/goodbye?name=Evert')) as any
 
     expect(goodbyeRes.status).to.be.equal(200)
     expect(goodbyeRes.body).to.deep.eq(apiResponse('Goodbye Evert!'))
