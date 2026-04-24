@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/core",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A minimal, strongly typed HTTP library with Zod validation",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.0.0",
-    "@zhttp/errors": "2.0.1",
+    "@zhttp/errors": "2.0.2",
     "@types/express": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -51,7 +51,7 @@
     "typescript": "^5.5.0"
   },
   "peerDependencies": {
-    "@zhttp/errors": "2.0.1",
+    "@zhttp/errors": "2.0.2",
     "zod": "^4.0.0"
   },
   "engines": {
