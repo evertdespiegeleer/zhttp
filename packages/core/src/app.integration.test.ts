@@ -3,7 +3,7 @@
 import { describe, it, before, after } from 'node:test'
 import { Server } from './app.js'
 import { get } from './util/endpoint.js'
-import z from 'zod'
+import { z } from 'zod'
 import { zApiOutput, apiResponse } from './util/apiResponse.js'
 import { controller } from './util/controller.js'
 import sinon from 'sinon'

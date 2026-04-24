@@ -1,5 +1,4 @@
-import { type ZodRawShape, type ZodString, type ZodObject, type ZodSchema } from 'zod'
-import z from 'zod'
+import { z, type ZodRawShape, type ZodString, type ZodObject, type ZodType } from 'zod'
 import type { NextFunction, Request, Response } from 'express'
 import { type Middleware } from './middleware.js'
 import { InternalServerError, NotImplementedError, ValidationError } from '@zhttp/errors'
@@ -22,21 +21,19 @@ export type Method = (typeof methods)[number]
 
 type ExtractRouteParams<Path extends string> = string extends Path
   ? Record<string, ZodString>
-  : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Path extends `${infer _Start}:${infer Param}/${infer Rest}`
-    ? { [K in Param | keyof ExtractRouteParams<Rest>]?: ZodString }
-    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Path extends `${infer _Start}:${infer Param}`
+  : Path extends `${infer _Start}:${infer Param}/${infer Rest}`
+    ? { [K in Param | keyof ExtractRouteParams<Rest>]: ZodString }
+    : Path extends `${infer _Start}:${infer Param}`
       ? { [K in Param]: ZodString }
       : ZodRawShape
 
 export type InputValidationSchema<Path extends string> = ZodObject<{
   params?: ZodObject<ExtractRouteParams<Path>>
-  query?: ZodObject<Record<string, ZodSchema>>
-  body?: ZodSchema
+  query?: ZodObject<Record<string, ZodType>>
+  body?: ZodType
 }>
 
-export type ResponseValidationSchema = ZodSchema
+export type ResponseValidationSchema = ZodType
 
 export interface EndpointOptions<
   Path extends string,
@@ -108,7 +105,7 @@ export class Endpoint<
     inputValidationSchemaShape: NewInputsSchemaShape
   ) {
     return new Endpoint<Path, ZodObject<NewInputsSchemaShape>, OutputSchema>({
-      ...this.options,
+      ...this.options as any,
       inputValidationSchema: z.object(inputValidationSchemaShape)
     })
   }

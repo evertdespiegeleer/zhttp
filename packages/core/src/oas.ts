@@ -4,7 +4,7 @@ import {
   extendZodWithOpenApi
 } from '@asteasolutions/zod-to-openapi'
 import { type AnyEndpoint } from './util/endpoint.js'
-import z from 'zod'
+import { z } from 'zod'
 import { type Controller } from './util/controller.js'
 
 extendZodWithOpenApi(z)

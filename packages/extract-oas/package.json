@@ -1,0 +1,38 @@
+{
+  "name": "@zhttp/extract-oas",
+  "version": "1.1.4-refactor-zod-4.7",
+  "description": "CLI tool to extract OpenAPI specs from zhttp servers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evertdespiegeleer/zhttp.git"
+  },
+  "license": "MIT",
+  "author": "Evert De Spiegeleer",
+  "type": "module",
+  "bin": {
+    "extract-oas": "./dist/esm/main.js"
+  },
+  "files": [
+    "./dist",
+    "./readme.md"
+  ],
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.build.esm.json"
+  },
+  "dependencies": {
+    "tsx": "^4.19.0",
+    "yaml": "^2.7.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/yargs": "^17.0.33",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": "^20.10.x",
+    "npm": "^10.2.3"
+  }
+}

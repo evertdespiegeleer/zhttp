@@ -71,7 +71,7 @@ const zMetaDataOutput = z.object({
  * })
  * ```
  */
-export const zApiOutput = <OutputSchema extends z.ZodSchema>(
+export const zApiOutput = <OutputSchema extends z.ZodType>(
   dataSchema: OutputSchema
 ) =>
     z.object({

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, before, after } from 'node:test'
 import { get } from './endpoint.js'
-import z from 'zod'
+import { z } from 'zod'
 import { zApiOutput, apiResponse } from './apiResponse.js'
 import { bindControllerToApp, controller } from './controller.js'
 import sinon from 'sinon'

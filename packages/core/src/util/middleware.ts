@@ -7,25 +7,17 @@ export enum MiddlewareTypes {
   AFTER,
 }
 
-export type AsyncRequestHandler = (
-  ...args: Parameters<RequestHandler>
-) => Promise<ReturnType<RequestHandler>>
+export type BeforeMiddlewareHandler =
+  (req: Request, res: Response, next: NextFunction) => void | Promise<void>
 
-export type AsyncErrorRequestHandler = (
-  ...args: Parameters<ErrorRequestHandler>
-) => Promise<ReturnType<ErrorRequestHandler>>
+export type AfterMiddlewareHandler =
+  (err: Error, req: Request, res: Response, next: NextFunction) => void | Promise<void>
 
-export type MiddlewareHandler =
-  | RequestHandler
-  | ErrorRequestHandler
-  | AsyncRequestHandler
-  | AsyncErrorRequestHandler
+export type MiddlewareHandler = BeforeMiddlewareHandler | AfterMiddlewareHandler
 
-interface MiddlewareProps {
-  name?: string
-  handler: MiddlewareHandler
-  type: MiddlewareTypes
-}
+type MiddlewareProps =
+  | { name?: string; handler: BeforeMiddlewareHandler; type: MiddlewareTypes.BEFORE }
+  | { name?: string; handler: AfterMiddlewareHandler; type: MiddlewareTypes.AFTER }
 
 const log = loggerInstance.logger('zhttp:middlewareHandler')
 
@@ -42,19 +34,11 @@ function middlewareWrapper (
         next(); return
       }
       try {
-        if (isPromise(middlewareHandler)) {
-          await new Promise((resolve, reject) => {
-            const localNext: NextFunction = (...params) => {
-              resolve(...params)
-            }
-            const m = middlewareHandler as AsyncRequestHandler
-            m(req, res, localNext).then(resolve).catch(reject)
-          })
-            .then(next)
-            .catch(next); return
+        const m = middlewareHandler as BeforeMiddlewareHandler
+        const result = m(req, res, next)
+        if (isPromise(result)) {
+          await result
         }
-        const m = middlewareHandler as RequestHandler
-        m(req, res, next)
       } catch (err) {
         next(err)
       }
@@ -74,20 +58,11 @@ function middlewareWrapper (
       next(); return
     }
     try {
-      if (isPromise(middlewareHandler)) {
-        await new Promise((resolve, reject) => {
-          const localNext: NextFunction = (...params) => {
-            resolve(...params)
-          }
-          const m = middlewareHandler as AsyncErrorRequestHandler
-          m(prevError, req, res, localNext).then(resolve).catch(reject)
-        })
-          .then(next)
-          .catch(next); return
+      const m = middlewareHandler as AfterMiddlewareHandler
+      const result = m(prevError, req, res, next)
+      if (isPromise(result)) {
+        await result
       }
-
-      const m = middlewareHandler as ErrorRequestHandler
-      m(prevError, req, res, next)
     } catch (err) {
       next(err)
     }
