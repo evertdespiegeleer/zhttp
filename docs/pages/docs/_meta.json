@@ -5,6 +5,5 @@
   "concepts": "Concepts",
   "openapi": "OpenAPI",
   "errors": "Errors",
-  "order-of-execution": "Order of execution",
-  "cjs": "CommonJS support"
+  "order-of-execution": "Order of execution"
 }
