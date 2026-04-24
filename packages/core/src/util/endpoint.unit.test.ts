@@ -1,20 +1,17 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, before, after } from 'node:test'
-import { endpoint, endpointToExpressHandler } from './endpoint.js'
-import { z } from 'zod'
-import { zApiOutput, apiResponse } from './apiResponse.js'
-import { type Response, type Request, type NextFunction } from 'express'
-import sinon from 'sinon'
+import { after, before, describe, it } from 'node:test'
 import { NotImplementedError, ValidationError } from '@zhttp/errors'
 import { expect } from 'chai'
+import type { NextFunction, Request, Response } from 'express'
+import sinon from 'sinon'
+import { z } from 'zod'
+import { apiResponse, zApiOutput } from './apiResponse.js'
+import { endpoint, endpointToExpressHandler } from './endpoint.js'
 
 const promisifyExpressHandler = async (
   handler: (req: Request, res: Response, next: NextFunction) => unknown,
   req: Request
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 ) =>
-  await new Promise<{ response: any, error: any }>((resolve) => {
+  await new Promise<{ response: any; error: any }>((resolve) => {
     let response: any
     let error: any
 
@@ -37,11 +34,11 @@ const promisifyExpressHandler = async (
 describe('endpoint', () => {
   // Servertime is typically included in the api response, so we have to make sure the clock doesn't tick when checking responses
   let clock: sinon.SinonFakeTimers
-  before(function () {
+  before(() => {
     clock = sinon.useFakeTimers()
   })
 
-  after(function () {
+  after(() => {
     clock.restore()
   })
 
@@ -81,10 +78,7 @@ describe('endpoint', () => {
       }
     } as unknown as Request
 
-    const { error, response } = await promisifyExpressHandler(
-      expressHandler,
-      mockReq
-    )
+    const { error, response } = await promisifyExpressHandler(expressHandler, mockReq)
 
     expect(response).to.deep.eq(apiResponse('Hello Satan!'))
     expect(error).to.be.undefined
@@ -111,10 +105,7 @@ describe('endpoint', () => {
       }
     } as unknown as Request
 
-    const { error, response } = await promisifyExpressHandler(
-      expressHandler,
-      mockReq
-    )
+    const { error, response } = await promisifyExpressHandler(expressHandler, mockReq)
 
     expect(error).to.be.instanceOf(ValidationError)
     expect(response).to.be.undefined
@@ -138,10 +129,7 @@ describe('endpoint', () => {
       }
     } as unknown as Request
 
-    const { error, response } = await promisifyExpressHandler(
-      expressHandler,
-      mockReq
-    )
+    const { error, response } = await promisifyExpressHandler(expressHandler, mockReq)
 
     expect(error).to.be.instanceOf(NotImplementedError)
     expect(response).to.be.undefined

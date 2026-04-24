@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
+import { z } from 'zod'
 
 export const validationExampleController = controller('validationExample')
 
@@ -11,9 +11,11 @@ validationExampleController.endpoint(
         name: z.string().min(5)
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ query }) => {
       return {
         message: `Hello ${query.name ?? 'everyone'}!`
@@ -28,9 +30,11 @@ validationExampleController.endpoint(
         name: z.string().optional()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async (_input) => {
       return {
         thisKeyShouldntBeHere: 'noBueno'

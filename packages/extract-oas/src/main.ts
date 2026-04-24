@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 import { register } from 'tsx/esm/api'
+
 register()
 
-import { resolve } from 'node:path'
 import { writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { stringify as yamlStringify } from 'yaml'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { stringify as yamlStringify } from 'yaml'
 
 const argv = await yargs(hideBin(process.argv))
   .option('serverfile', {

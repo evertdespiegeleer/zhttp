@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-import { Server } from '../app.js'
-import supertest, { type Response } from 'supertest'
-import { expect } from 'chai'
-import { describe, it, before, after } from 'node:test'
-import { controller, get } from '../main.js'
+import { after, before, describe, it } from 'node:test'
 import { BadRequestError, ConflictError } from '@zhttp/errors'
+import { expect } from 'chai'
+import supertest, { type Response } from 'supertest'
+import { Server } from '../app.js'
+import { controller, get } from '../main.js'
 
 describe('errorHandler', () => {
   let http: Server
@@ -46,7 +45,10 @@ describe('errorHandler', () => {
       .get('/bad-request')
       .expect(400)
       .end((err: any, res: Response) => {
-        if (err != null) { done(err); return }
+        if (err != null) {
+          done(err)
+          return
+        }
         expect(res.body).to.have.property('meta')
         expect(res.body.meta.error).to.have.property('code', 'BadRequestError')
         done()
@@ -58,7 +60,10 @@ describe('errorHandler', () => {
       .get('/unique-violation')
       .expect(409)
       .end((err: any, res: Response) => {
-        if (err != null) { done(err); return }
+        if (err != null) {
+          done(err)
+          return
+        }
         expect(res.body.meta.error).to.have.property('code', 'ConflictError')
         done()
       })

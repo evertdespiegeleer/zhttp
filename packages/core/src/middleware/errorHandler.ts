@@ -1,20 +1,13 @@
-import { type Request, type Response, type NextFunction } from 'express'
-import { MiddlewareTypes, middleware } from '../util/middleware.js'
+import { ConflictError, InternalServerError, ZHTTPError } from '@zhttp/errors'
+import type { NextFunction, Request, Response } from 'express'
 import { apiResponse } from '../util/apiResponse.js'
-import { ConflictError, ZHTTPError, InternalServerError } from '@zhttp/errors'
 import { loggerInstance } from '../util/logger.js'
+import { MiddlewareTypes, middleware } from '../util/middleware.js'
 
 export const errorHandlerMiddleware = middleware({
   name: 'ErrorHandler',
   type: MiddlewareTypes.AFTER,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handler (
-    originalError: Error,
-    req: Request,
-    res: Response,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    next: NextFunction
-  ) {
+  handler(originalError: Error, req: Request, res: Response, _next: NextFunction) {
     let status = 500
     let parsedError = new InternalServerError()
 

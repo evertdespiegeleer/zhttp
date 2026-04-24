@@ -25,26 +25,20 @@ npx skills@latest add evertdespiegeleer/skills/zhttp
 ```ts
 // ./examples/basic-usage.ts
 
+import { apiResponse, controller, get, openapiController, Server, zApiOutput } from '@zhttp/core'
 import { z } from 'zod'
-import {
-  Server,
-  controller,
-  get,
-  zApiOutput,
-  apiResponse,
-  openapiController
-} from '@zhttp/core'
 
 // You can optionally add OAS info to a Zod schema using zodSchema.openapi(...).
 // If this schema is used in the input or output of an endpoint, the info
 // will be included in the generated openapi spec.
 
-const zHelloResponse = zApiOutput(z.object({
-  greeting: z.string().openapi({ example: 'Hello Joske!' })
-})).openapi('HelloResponse')
+const zHelloResponse = zApiOutput(
+  z.object({
+    greeting: z.string().openapi({ example: 'Hello Joske!' })
+  })
+).openapi('HelloResponse')
 
-const helloController = controller('Hello')
-  .description('This controller says hello to everyone')
+const helloController = controller('Hello').description('This controller says hello to everyone')
 
 helloController.endpoint(
   get('/hello')
@@ -62,21 +56,20 @@ helloController.endpoint(
     })
 )
 
-const server = new Server({
-  controllers: [
-    helloController,
-    openapiController
-  ],
-  middlewares: []
-}, {
-  port: 3000,
-  oasInfo: {
-    title: 'A very cool api',
-    version: '1.0.0'
+const server = new Server(
+  {
+    controllers: [helloController, openapiController],
+    middlewares: []
+  },
+  {
+    port: 3000,
+    oasInfo: {
+      title: 'A very cool api',
+      version: '1.0.0'
+    }
   }
-})
+)
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 server.start()
 
 ```
@@ -114,8 +107,8 @@ An important distinction between plain express and zhttp is that zhttp – consc
 ```ts
 // ./examples/concept-endpoint.ts
 
-import { z } from 'zod'
 import { endpoint, get } from '@zhttp/core'
+import { z } from 'zod'
 
 const zGreetingOutput = z.object({
   message: z.string()
@@ -162,11 +155,10 @@ Controllers do **not** serve as routers. Every endpoint path should be a _comple
 ```ts
 // ./examples/concept-controller.ts
 
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
+import { z } from 'zod'
 
-export const greetingController = controller('greeting')
-  .description('A controller that greets the world.')
+export const greetingController = controller('greeting').description('A controller that greets the world.')
 
 greetingController.endpoint(
   get('/hello', 'getGreeting')
@@ -176,9 +168,11 @@ greetingController.endpoint(
         name: z.string().optional()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ query }) => {
       return {
         message: `Hello ${query.name ?? 'everyone'}!`
@@ -203,20 +197,21 @@ Middlewares can be bound on multiple levels:
 ```ts
 // ./examples/concept-middleware.ts
 
-import { type Request, type Response, type NextFunction } from 'express'
-import { middleware, MiddlewareTypes } from '@zhttp/core'
+import { MiddlewareTypes, middleware } from '@zhttp/core'
+import type { NextFunction, Request, Response } from 'express'
 
 export const lastVisitMiddleware = middleware({
   name: 'lastVisitMiddleware',
   type: MiddlewareTypes.BEFORE,
-  handler (req: Request, res: Response, next: NextFunction) {
+  handler(req: Request, res: Response, next: NextFunction) {
     const now = new Date()
     const lastVisitCookieValue = req.cookies.beenHereBefore
     const lastVisitTime = lastVisitCookieValue != null ? new Date(String(lastVisitCookieValue)) : undefined
     res.cookie('beenHereBefore', now.toISOString())
     if (lastVisitTime == null) {
-      console.log('Seems like we\'ve got a new user 👀')
-      next(); return
+      console.log("Seems like we've got a new user 👀")
+      next()
+      return
     }
     const daysSinceLastVisit = (now.getTime() - lastVisitTime.getTime()) / (1000 * 60 * 60 * 24)
     console.log(`It's been ${daysSinceLastVisit} days since this user last visited.`)
@@ -237,14 +232,16 @@ import { Server } from '@zhttp/core'
 import { greetingController } from './concept-controller.js'
 import { lastVisitMiddleware } from './concept-middleware.js'
 
-export const server = new Server({
-  controllers: [greetingController],
-  middlewares: [lastVisitMiddleware]
-}, {
-  port: 8080
-})
+export const server = new Server(
+  {
+    controllers: [greetingController],
+    middlewares: [lastVisitMiddleware]
+  },
+  {
+    port: 8080
+  }
+)
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 server.start()
 
 ```
@@ -264,9 +261,7 @@ The openapi definition can be directly from the server object.
 
 import { server } from './concept-server.js'
 
-console.log(
-  server.oasInstance.getJsonSpec()
-)
+console.log(server.oasInstance.getJsonSpec())
 
 ```
 
@@ -283,9 +278,9 @@ If you want to throw a specific type of error which will be reflectced in the ht
 ```ts
 // ./examples/concepts-errors.ts
 
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
 import { NotFoundError } from '@zhttp/errors'
+import { z } from 'zod'
 
 // Let's presume we're talking to some sort of database
 const db: any = undefined
@@ -299,9 +294,11 @@ vegetablesController.endpoint(
         vegetableId: z.string().uuid()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ params: { vegetableId } }) => {
       const vegetableDetails = await db.getVegetableById(vegetableId)
       if (vegetableDetails == null) {
@@ -325,8 +322,8 @@ If an error is detected as part of the request output validation, an `InternalSe
 ```ts
 // ./examples/validation-errors.ts
 
-import { z } from 'zod'
 import { controller, get } from '@zhttp/core'
+import { z } from 'zod'
 
 export const validationExampleController = controller('validationExample')
 
@@ -338,9 +335,11 @@ validationExampleController.endpoint(
         name: z.string().min(5)
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async ({ query }) => {
       return {
         message: `Hello ${query.name ?? 'everyone'}!`
@@ -355,9 +354,11 @@ validationExampleController.endpoint(
         name: z.string().optional()
       })
     })
-    .response(z.object({
-      message: z.string()
-    }))
+    .response(
+      z.object({
+        message: z.string()
+      })
+    )
     .handler(async (_input) => {
       return {
         thisKeyShouldntBeHere: 'noBueno'

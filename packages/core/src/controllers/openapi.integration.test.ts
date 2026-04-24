@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-import { Server } from '../app.js'
+import { after, before, describe, it } from 'node:test'
 import supertest from 'supertest'
-import { describe, it, before, after } from 'node:test'
+import { Server } from '../app.js'
 import { openapiController } from './openapi.js'
 
 describe('openapiController', () => {
   let http: Server
   before(async () => {
-    http = new Server({
-      controllers: [openapiController]
-    }, { port: undefined })
+    http = new Server(
+      {
+        controllers: [openapiController]
+      },
+      { port: undefined }
+    )
     await http.start()
   })
 
