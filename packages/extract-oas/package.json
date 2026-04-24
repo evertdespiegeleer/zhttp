@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/extract-oas",
-  "version": "2.0.0",
+  "version": "2.0.1-refactor-remove-cjs-support.0",
   "description": "CLI tool to extract OpenAPI specs from zhttp servers",
   "repository": {
     "type": "git",
