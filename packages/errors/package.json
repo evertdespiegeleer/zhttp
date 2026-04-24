@@ -10,24 +10,18 @@
   "author": "Evert De Spiegeleer",
   "type": "module",
   "exports": {
-    "import": {
-      "types": "./dist/types/main.d.ts",
-      "default": "./dist/esm/main.js"
-    },
-    "require": {
-      "types": "./dist/types/main.d.ts",
-      "default": "./dist/cjs/main.cjs"
+    ".": {
+      "types": "./dist/main.d.ts",
+      "default": "./dist/main.js"
     }
   },
-  "types": "./dist/types/main.d.ts",
+  "types": "./dist/main.d.ts",
   "files": [
     "./dist",
     "./readme.md"
   ],
   "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:cjs": "npx rollup ./dist/esm/main.js --file ./dist/cjs/main.cjs --format cjs",
-    "build:esm": "tsc -p tsconfig.build.esm.json",
+    "build": "tsc -p tsconfig.build.json",
     "test": "echo \"No tests here :)\""
   },
   "dependencies": {

@@ -10,15 +10,14 @@
   "author": "Evert De Spiegeleer",
   "type": "module",
   "bin": {
-    "extract-oas": "./dist/esm/main.js"
+    "extract-oas": "./dist/main.js"
   },
   "files": [
     "./dist",
     "./readme.md"
   ],
   "scripts": {
-    "build": "npm run build:esm",
-    "build:esm": "tsc -p tsconfig.build.esm.json"
+    "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "tsx": "^4.19.0",
