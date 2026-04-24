@@ -126,9 +126,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          cd packages/errors && npm publish --access=public --tag prerelease && cd ../..
-          cd packages/core && npm publish --access=public --tag prerelease && cd ../..
-          cd packages/extract-oas && npm publish --access=public --tag prerelease && cd ../..
+          npm publish --workspaces --access=public --tag prerelease
 
       - name: Commit and push changes
         run: |
