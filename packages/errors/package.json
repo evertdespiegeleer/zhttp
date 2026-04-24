@@ -1,6 +1,6 @@
 {
   "name": "@zhttp/errors",
-  "version": "2.0.1-chore-migrate-to-biome.1",
+  "version": "2.0.1",
   "description": "Error library extending @zhttp/core",
   "repository": {
     "type": "git",
