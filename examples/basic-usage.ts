@@ -3,19 +3,14 @@ import {
   Server,
   controller,
   get,
-  extendZodWithOpenApi,
   zApiOutput,
   apiResponse,
   openapiController
 } from '@zhttp/core'
 
-extendZodWithOpenApi(z)
-// ⬆ What this allows you to do is to optionally add OAS info
-// to a Zod validation schema using zodSchema.openapi(...)
-// If this Zod schema is used in the input or output of an endpoint,
-// the info provided will be included in the generated openapi spec.
-//
-// Exmaple:
+// You can optionally add OAS info to a Zod schema using zodSchema.openapi(...).
+// If this schema is used in the input or output of an endpoint, the info
+// will be included in the generated openapi spec.
 
 const zHelloResponse = zApiOutput(z.object({
   greeting: z.string().openapi({ example: 'Hello Joske!' })

@@ -12,6 +12,14 @@ It solves some of the major pains of building an API with express (handler typin
 npm install @zhttp/core @zhttp/errors zod
 ```
 
+# Agent skill
+
+If you're using an AI coding agent (e.g. Claude Code), you can install the `zhttp` agent skill to give it deep knowledge of this library's conventions and APIs:
+
+```sh
+npx skills@latest add evertdespiegeleer/skills/zhttp
+```
+
 # Basic usage examples
 
 ```ts
@@ -22,19 +30,14 @@ import {
   Server,
   controller,
   get,
-  extendZodWithOpenApi,
   zApiOutput,
   apiResponse,
   openapiController
 } from '@zhttp/core'
 
-extendZodWithOpenApi(z)
-// ⬆ What this allows you to do is to optionally add OAS info
-// to a Zod validation schema using zodSchema.openapi(...)
-// If this Zod schema is used in the input or output of an endpoint,
-// the info provided will be included in the generated openapi spec.
-//
-// Exmaple:
+// You can optionally add OAS info to a Zod schema using zodSchema.openapi(...).
+// If this schema is used in the input or output of an endpoint, the info
+// will be included in the generated openapi spec.
 
 const zHelloResponse = zApiOutput(z.object({
   greeting: z.string().openapi({ example: 'Hello Joske!' })
