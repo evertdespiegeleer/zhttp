@@ -1,7 +1,7 @@
 {
   "name": "@zhttp/docs",
   "private": true,
-  "version": "2.0.1-chore-migrate-to-biome.0",
+  "version": "2.0.1-chore-migrate-to-biome.1",
   "scripts": {
     "fill-code-snippets": "npx embedme ./pages/**/*.*",
     "prebuild": "npm run fill-code-snippets",
